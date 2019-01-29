@@ -38,15 +38,13 @@ kgql {
 }
 
 kotlin {
+
+    def iosTargetName = project.findProperty("kotlin.target") ?: "iosX64"
+    def iosTarget = presets.getByName(iosTargetName)
+
     android("android")
-    // This is for iPhone emulator
-    // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
-    iosX64("iosX64") {
-        binaries {
-            framework()
-        }
-    }
-    iosArm64("iosArm64") {
+
+    targetFromPreset(iosTarget, "ios") {
         binaries {
             framework()
         }
@@ -56,8 +54,11 @@ kotlin {
         commonMain {
             dependencies {
                 implementation deps.kotlin.stdlib.common
+                implementation deps.kotlin.coroutines.common
+                implementation deps.kotlin.serialization.common
 
-                api deps.kotlin.serialization.common
+                implementation deps.ktor.core
+                implementation deps.ktor.json
             }
         }
         commonTest {
@@ -70,8 +71,11 @@ kotlin {
             dependsOn commonMain
             dependencies {
                 implementation deps.kotlin.stdlib.jdk7
+                implementation deps.kotlin.coroutines.android
+                implementation deps.kotlin.serialization.jvm
 
-                api deps.kotlin.serialization.jvm
+                implementation deps.ktor.android
+                implementation deps.ktor.jsonJvm
             }
         }
         androidTest {
@@ -80,24 +84,20 @@ kotlin {
                 implementation deps.kotlin.test.junit
             }
         }
-        nativeMain {
-            dependsOn commonMain
+
+        iosMain {
             dependencies {
-                api deps.kotlin.serialization.native
-            }
-        }
-        nativeTest {
-            dependsOn nativeMain
-        }
-        [iosX64("iosX64"), iosArm64("iosArm64")].forEach { t ->
-            t.compilations.main.defaultSourceSet {
-                dependsOn nativeMain
-            }
-            t.compilations.test.defaultSourceSet {
-                dependsOn nativeTest
+                implementation deps.kotlin.coroutines.native
+                implementation deps.kotlin.serialization.native
+
+                implementation deps.ktor.ios
+                implementation deps.ktor.jsonIos
             }
         }
 
+        iosTest {
+
+        }
     }
 }
 
@@ -115,14 +115,16 @@ configurations {
 task copyFramework {
     def buildType = project.findProperty("kotlin.build.type") ?: "DEBUG"
     def target = project.findProperty("kotlin.target") ?: "iosX64"
-    def bin = kotlin.targets."$target".compilations.main.target.binaries.findFramework("", buildType)
+    def bin = kotlin.targets.ios.compilations.main.target.binaries.findFramework("", buildType)
     dependsOn bin.linkTask
 
     doLast {
-        def srcFile = kotlin.targets."$target".compilations.main.target.binaries.findFramework("", buildType).outputFile
+        def srcFile = kotlin.targets.ios.compilations.main.target.binaries.findFramework("", buildType).outputFile
         def targetDir = getProperty("configuration.build.dir")
+
         println("iOS buildType: $buildType")
         println("iOS target: $target")
+
         copy {
             from srcFile.parent
             into targetDir
