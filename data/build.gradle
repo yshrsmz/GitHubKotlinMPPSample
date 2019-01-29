@@ -104,6 +104,8 @@ task copyFramework {
     doLast {
         def srcFile = kotlin.targets."$target".compilations.main.target.binaries.findFramework("", buildType).outputFile
         def targetDir = getProperty("configuration.build.dir")
+        println("iOS buildType: $buildType")
+        println("iOS target: $target")
         copy {
             from srcFile.parent
             into targetDir

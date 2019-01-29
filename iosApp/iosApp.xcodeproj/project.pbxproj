@@ -12,8 +12,8 @@
 		F861D7E6207FA40F0085E80D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F861D7E4207FA40F0085E80D /* Main.storyboard */; };
 		F861D7EB207FA4100085E80D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F861D7E9207FA4100085E80D /* LaunchScreen.storyboard */; };
 		F861D7F6207FA4100085E80D /* iosAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861D7F5207FA4100085E80D /* iosAppTests.swift */; };
-		F861D80C207FA4200085E80D /* app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F861D805207FA4200085E80D /* app.framework */; };
-		F861D80D207FA4200085E80D /* app.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F861D805207FA4200085E80D /* app.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F861D80C207FA4200085E80D /* data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F861D805207FA4200085E80D /* data.framework */; };
+		F861D80D207FA4200085E80D /* data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F861D805207FA4200085E80D /* data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F861D80D207FA4200085E80D /* app.framework in Embed Frameworks */,
+				F861D80D207FA4200085E80D /* data.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -48,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		44E70667220008C1002BABA2 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = "<group>"; };
 		F861D7DD207FA40F0085E80D /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F861D7E0207FA40F0085E80D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F861D7E2207FA40F0085E80D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -57,8 +58,7 @@
 		F861D7F1207FA4100085E80D /* iosAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iosAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F861D7F5207FA4100085E80D /* iosAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosAppTests.swift; sourceTree = "<group>"; };
 		F861D7F7207FA4100085E80D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F861D805207FA4200085E80D /* app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F861D813207FA4520085E80D /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
+		F861D805207FA4200085E80D /* data.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = data.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F861D80C207FA4200085E80D /* app.framework in Frameworks */,
+				F861D80C207FA4200085E80D /* data.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 		F861D7D4207FA40F0085E80D = {
 			isa = PBXGroup;
 			children = (
-				F861D813207FA4520085E80D /* app */,
+				44E70667220008C1002BABA2 /* data */,
 				F861D7DF207FA40F0085E80D /* iosApp */,
 				F861D7F4207FA4100085E80D /* iosAppTests */,
 				F861D7DE207FA40F0085E80D /* Products */,
@@ -95,7 +95,7 @@
 			children = (
 				F861D7DD207FA40F0085E80D /* iosApp.app */,
 				F861D7F1207FA4100085E80D /* iosAppTests.xctest */,
-				F861D805207FA4200085E80D /* app.framework */,
+				F861D805207FA4200085E80D /* data.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,9 +161,9 @@
 			productReference = F861D7F1207FA4100085E80D /* iosAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F861D804207FA4200085E80D /* app */ = {
+		F861D804207FA4200085E80D /* data */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F861D80E207FA4200085E80D /* Build configuration list for PBXNativeTarget "app" */;
+			buildConfigurationList = F861D80E207FA4200085E80D /* Build configuration list for PBXNativeTarget "data" */;
 			buildPhases = (
 				F861D812207FA4320085E80D /* ShellScript */,
 			);
@@ -171,9 +171,9 @@
 			);
 			dependencies = (
 			);
-			name = app;
+			name = data;
 			productName = app;
-			productReference = F861D805207FA4200085E80D /* app.framework */;
+			productReference = F861D805207FA4200085E80D /* data.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -212,7 +212,7 @@
 			targets = (
 				F861D7DC207FA40F0085E80D /* iosApp */,
 				F861D7F0207FA4100085E80D /* iosAppTests */,
-				F861D804207FA4200085E80D /* app */,
+				F861D804207FA4200085E80D /* data */,
 			);
 		};
 /* End PBXProject section */
@@ -248,7 +248,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../gradlew\" -p \"$SRCROOT/../app\" copyFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\"                      \\\n-Pkotlin.target=\"$KOTLIN_TARGET\"";
+			shellScript = "\"$SRCROOT/../gradlew\" -p \"$SRCROOT/../data\" copyFramework \\\n-Pconfiguration.build.dir=\"$CONFIGURATION_BUILD_DIR\"          \\\n-Pkotlin.build.type=\"$KOTLIN_BUILD_TYPE\"                      \\\n-Pkotlin.target=\"$KOTLIN_TARGET\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -280,7 +280,7 @@
 		};
 		F861D80B207FA4200085E80D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F861D804207FA4200085E80D /* app */;
+			target = F861D804207FA4200085E80D /* data */;
 			targetProxy = F861D80A207FA4200085E80D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -517,8 +517,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				KOTLIN_BUILD_TYPE = DEBUG;
 				KOTLIN_TARGET = "";
-				"KOTLIN_TARGET[sdk=iphoneos*]" = ios;
-				"KOTLIN_TARGET[sdk=iphonesimulator*]" = ios;
+				"KOTLIN_TARGET[sdk=iphoneos*]" = iosArm64;
+				"KOTLIN_TARGET[sdk=iphonesimulator*]" = iosX64;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -548,8 +548,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				KOTLIN_BUILD_TYPE = RELEASE;
 				KOTLIN_TARGET = "";
-				"KOTLIN_TARGET[sdk=iphoneos*]" = ios;
-				"KOTLIN_TARGET[sdk=iphonesimulator*]" = ios;
+				"KOTLIN_TARGET[sdk=iphoneos*]" = iosArm64;
+				"KOTLIN_TARGET[sdk=iphonesimulator*]" = iosX64;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -595,7 +595,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F861D80E207FA4200085E80D /* Build configuration list for PBXNativeTarget "app" */ = {
+		F861D80E207FA4200085E80D /* Build configuration list for PBXNativeTarget "data" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F861D80F207FA4200085E80D /* Debug */,
