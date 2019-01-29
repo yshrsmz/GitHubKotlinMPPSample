@@ -1,0 +1,114 @@
+plugins {
+    id 'kotlin-multiplatform'
+//    kotlin('multiplatform') version versions.kotlin
+    id 'kotlinx-serialization'
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+        }
+    }
+}
+
+kotlin {
+    android("android")
+    // This is for iPhone emulator
+    // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
+    iosX64("iosX64") {
+        binaries {
+            framework()
+        }
+    }
+    iosArm64("iosArm64") {
+        binaries {
+            framework()
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation deps.kotlin.test.common
+
+                api deps.kotlin.serialization.common
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation deps.kotlin.test.common
+                implementation deps.kotlin.test.commonAnnotations
+            }
+        }
+        androidMain{
+            dependencies {
+                implementation deps.kotlin.stdlib.jdk7
+
+                api deps.kotlin.serialization.jvm
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation deps.kotlin.test.jvm
+                implementation deps.kotlin.test.junit
+            }
+        }
+        nativeMain {
+            dependencies {
+                api deps.kotlin.serialization.native
+            }
+        }
+        nativeTest {
+            dependsOn nativeMain
+        }
+        [iosX64("iosX64"), iosArm64("iosArm64")].forEach { t ->
+            t.compilations.main.defaultSourceSet {
+                dependsOn nativeMain
+            }
+            t.compilations.test.defaultSourceSet {
+                dependsOn nativeTest
+            }
+        }
+
+    }
+}
+
+// This task attaches native framework built from ios module to Xcode project
+// (see iosApp directory). Don't run this task directly,
+// Xcode runs this task itself during its build process.
+// Before opening the project from iosApp directory in Xcode,
+// make sure all Gradle infrastructure exists (gradle.wrapper, gradlew).
+task copyFramework {
+    def buildType = project.findProperty("kotlin.build.type") ?: "DEBUG"
+    def target = project.findProperty("kotlin.target") ?: "iosX64"
+    def bin = kotlin.targets."$target".compilations.main.target.binaries.findFramework("", buildType)
+    dependsOn bin.linkTask
+
+    doLast {
+        def srcFile = kotlin.targets."$target".compilations.main.target.binaries.findFramework("", buildType).outputFile
+        def targetDir = getProperty("configuration.build.dir")
+        copy {
+            from srcFile.parent
+            into targetDir
+            include 'data.framework/**'
+            include 'data.framework.dSYM'
+        }
+    }
+}

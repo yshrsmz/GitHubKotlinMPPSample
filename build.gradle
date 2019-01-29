@@ -1,0 +1,69 @@
+apply plugin: "com.github.ben-manes.versions"
+
+buildscript {
+    apply from: "$rootDir/gradle/dependencies.gradle"
+
+    repositories {
+        // prevent gradle from re-downloading kotlin/native's POM upon sync
+        // https://youtrack.jetbrains.com/issue/KT-28128
+        google().content() { excludeGroup "Kotlin/Native" }
+        mavenCentral().content() { excludeGroup "Kotlin/Native" }
+        jcenter().content() { excludeGroup "Kotlin/Native" }
+        maven {
+            url 'https://dl.bintray.com/kotlin/kotlinx'
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+        maven {
+            url 'https://dl.bintray.com/kotlin/ktor'
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap"
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+    }
+    dependencies {
+        classpath deps.plugins.android
+        classpath deps.plugins.kotlin
+        classpath deps.plugins.serialization
+        classpath deps.plugins.versions
+    }
+}
+
+allprojects {
+    repositories {
+        google().content() { excludeGroup "Kotlin/Native" }
+        mavenCentral().content() { excludeGroup "Kotlin/Native" }
+        maven {
+            url 'https://dl.bintray.com/kotlin/kotlinx'
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+        maven {
+            url 'https://dl.bintray.com/kotlin/ktor'
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap"
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+        jcenter().content() { excludeGroup "Kotlin/Native" }
+    }
+}
+
+wrapper {
+    gradleVersion = '5.1.1'
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
+}
