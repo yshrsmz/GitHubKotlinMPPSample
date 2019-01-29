@@ -1,8 +1,9 @@
 plugins {
     id 'kotlin-multiplatform'
-//    kotlin('multiplatform') version versions.kotlin
     id 'kotlinx-serialization'
     id 'com.android.library'
+    id 'com.squareup.sqldelight'
+    id 'com.codingfeline.kgql'
 }
 
 android {
@@ -28,6 +29,14 @@ android {
     }
 }
 
+sqldelight {
+    packageName = 'com.codingfeline.githubdata.db'
+}
+
+kgql {
+    packageName = 'com.codingfeline.githubdata.api'
+}
+
 kotlin {
     android("android")
     // This is for iPhone emulator
@@ -46,7 +55,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation deps.kotlin.test.common
+                implementation deps.kotlin.stdlib.common
 
                 api deps.kotlin.serialization.common
             }
@@ -57,7 +66,8 @@ kotlin {
                 implementation deps.kotlin.test.commonAnnotations
             }
         }
-        androidMain{
+        androidMain {
+            dependsOn commonMain
             dependencies {
                 implementation deps.kotlin.stdlib.jdk7
 
@@ -71,6 +81,7 @@ kotlin {
             }
         }
         nativeMain {
+            dependsOn commonMain
             dependencies {
                 api deps.kotlin.serialization.native
             }
@@ -89,6 +100,12 @@ kotlin {
 
     }
 }
+
+// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}
+
 
 // This task attaches native framework built from ios module to Xcode project
 // (see iosApp directory). Don't run this task directly,

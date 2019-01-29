@@ -1,0 +1,25 @@
+CREATE TABLE user (
+    id TEXT PRIMARY KEY NOT NULL,
+    login TEXT NOT NULL,
+    name TEXT NOT NULL,
+    bio TEXT NOT NULL DEFAULT "",
+    avatar_url TEXT NOT NULL DEFAULT "",
+    company TEXT NOT NULL DEFAULT "",
+    email TEXT NOT NULL DEFAULT ""
+);
+
+insertUser:
+INSERT INTO user (id, login, name, bio, avatar_url, company, email)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+
+selectAll:
+SELECT *
+FROM user;
+
+select:
+SELECT *
+FROM user
+WHERE login = ?;
+
+

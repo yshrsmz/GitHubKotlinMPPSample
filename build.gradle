@@ -22,17 +22,25 @@ buildscript {
             }
         }
         maven {
-            url "http://dl.bintray.com/kotlin/kotlin-eap"
+            url 'https://dl.bintray.com/yshrsmz/kgql'
             content {
                 excludeGroup "Kotlin/Native"
             }
         }
+//        maven {
+//            url "http://dl.bintray.com/kotlin/kotlin-eap"
+//            content {
+//                excludeGroup "Kotlin/Native"
+//            }
+//        }
     }
     dependencies {
         classpath deps.plugins.android
         classpath deps.plugins.kotlin
         classpath deps.plugins.serialization
         classpath deps.plugins.versions
+        classpath deps.plugins.sqldelight
+        classpath deps.plugins.kgql
     }
 }
 
@@ -53,11 +61,17 @@ allprojects {
             }
         }
         maven {
-            url "http://dl.bintray.com/kotlin/kotlin-eap"
+            url 'https://dl.bintray.com/yshrsmz/kgql'
             content {
                 excludeGroup "Kotlin/Native"
             }
         }
+//        maven {
+//            url "http://dl.bintray.com/kotlin/kotlin-eap"
+//            content {
+//                excludeGroup "Kotlin/Native"
+//            }
+//        }
         jcenter().content() { excludeGroup "Kotlin/Native" }
     }
 }

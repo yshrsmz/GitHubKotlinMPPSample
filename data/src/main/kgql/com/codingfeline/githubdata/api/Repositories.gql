@@ -1,0 +1,27 @@
+query Repositories($login: String!) {
+  user(login: $login) {
+    id
+    login
+    name
+    bio
+    avatarUrl
+    company
+    email
+    repositories(
+      orderBy: {field: UPDATED_AT, direction: DESC}
+      first: 50
+    ) {
+      nodes {
+        id
+        name
+        description
+        updatedAt
+        url
+        owner {
+          id,
+          login
+        }
+      }
+    }
+  }
+}

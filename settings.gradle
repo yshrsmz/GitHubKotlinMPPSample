@@ -1,4 +1,7 @@
 pluginManagement {
+    repositories {
+        mavenCentral()
+    }
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "kotlin-multiplatform") {
@@ -9,4 +12,7 @@ pluginManagement {
 }
 rootProject.name = 'GitHubKotlinMPPSample'
 
+enableFeaturePreview('GRADLE_METADATA')
+
 include ':data'
+include ':app'
