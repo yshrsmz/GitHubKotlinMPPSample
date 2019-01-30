@@ -57,10 +57,15 @@ ext.deps = [
                 jsonIos: "io.ktor:ktor-client-json-native:${versions.ktor}",
         ],
 
+        rx         : [
+                core: "io.reactivex.rxjava2:rxjava:2.2.6",
+        ],
+
 
         sqldelight : [
                 driverAndroid: "com.squareup.sqldelight:android-driver:${versions.sqldelight}",
-                driverIOs    : "com.squareup.sqldelight:ios-driver:${versions.sqldelight}"
+                driverIOs    : "com.squareup.sqldelight:ios-driver:${versions.sqldelight}",
+                rx2          : "com.squareup.sqldelight:rxjava2-extensions:${versions.sqldelight}"
 
         ],
 
