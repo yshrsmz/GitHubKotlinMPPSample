@@ -69,6 +69,10 @@ ext.deps = [
 
         ],
 
+        koptional  : [
+                core: "com.gojuno.koptional:koptional:1.6.0"
+        ],
+
         junit      : "junit:junit:4.12",
         truth      : "com.google.truth:truth:0.42",
         robolectric: [
