@@ -2,6 +2,7 @@ package com.codingfeline.githubdata.remote.response
 
 import com.codingfeline.githubdata.Repository
 import com.codingfeline.githubdata.User
+import com.codingfeline.githubdata.UserAndRepositories
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -57,7 +58,13 @@ fun UserResponse.toUser(): User {
         bio = bio,
         avatarUrl = avatarUrl,
         company = company,
-        email = email,
+        email = email
+    )
+}
+
+fun UserResponse.toUserAndRepositories(): UserAndRepositories {
+    return UserAndRepositories(
+        user = toUser(),
         repositories = repositories.nodes.map { it.toRepository() }
     )
 }

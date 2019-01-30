@@ -47,11 +47,7 @@ class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
             )
         }
 
-        println("result: $rawResult")
-
         val jsonResult = Json.plain.parseJson(rawResult).jsonObject
-
-        println("result as JsonElement: $jsonResult")
 
         if (jsonResult.containsKey("data") && !jsonResult["data"].isNull) {
             println("rawData.data: ${jsonResult["data"].jsonObject["user"]}")

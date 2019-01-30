@@ -5,14 +5,17 @@ CREATE TABLE repository (
     updated_at TEXT NOT NULL DEFAULT "",
     url TEXT NOT NULL,
     owner_id TEXT NOT NULL,
+    owner_login TEXT NOT NULL,
     FOREIGN KEY(owner_id) REFERENCES user(id)
 );
 
-insertRepository:
-INSERT INTO repository (id, name, description, updated_at, url, owner_id)
-VALUES (?, ?, ?, ?, ?, ?);
+CREATE INDEX repository_owner_login ON repository(owner_login);
+
+upsertRepository:
+INSERT OR REPLACE INTO repository (id, name, description, updated_at, url, owner_id, owner_login)
+VALUES (?, ?, ?, ?, ?, ?, ?);
 
 forUser:
 SELECT *
 FROM repository
-WHERE owner_id = ?;
+WHERE owner_login = ?;

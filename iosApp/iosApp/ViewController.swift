@@ -3,20 +3,25 @@ import data
 
 class ViewController: UIViewController {
     
-    let repository = GitHubRepository()
+    let repository = DataModuleKt.getGitHubRepository()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         label.text = Proxy().proxyHello()
+        let login = "yshrsmz"
         
-        repository.fetchUser(login: "yshrsmz") { (user, errors) -> KotlinUnit in
-            if (user != nil) {
-                NSLog("user: \(user)")
+        let query = repository.observeUser(login: login)
+        
+        let userNotifier = UserDataNotifier(query: query) { (user :User?) -> KotlinUnit in
+            if (user == nil) {
+                NSLog("user is nil")
             } else {
-                NSLog("errors: \(errors)")
+                NSLog("user: \(user)")
             }
             return KotlinUnit()
         }
+        
+        repository.fetchUser(login: login)
     }
 
     override func didReceiveMemoryWarning() {

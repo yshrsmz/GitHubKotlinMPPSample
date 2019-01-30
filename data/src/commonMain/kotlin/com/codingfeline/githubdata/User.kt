@@ -7,6 +7,5 @@ data class User(
     val bio: String,
     val avatarUrl: String,
     val company: String,
-    val email: String,
-    val repositories: List<Repository>
+    val email: String
 )

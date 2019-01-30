@@ -30,7 +30,7 @@ android {
 }
 
 sqldelight {
-    packageName = 'com.codingfeline.githubdata.db'
+    packageName = 'com.codingfeline.githubdata.local'
 }
 
 kgql {
@@ -76,6 +76,8 @@ kotlin {
 
                 implementation deps.ktor.android
                 implementation deps.ktor.jsonJvm
+
+                implementation deps.sqldelight.driverAndroid
             }
         }
         androidTest {
@@ -95,6 +97,8 @@ kotlin {
 
                 implementation deps.ktor.ios
                 implementation deps.ktor.jsonIos
+
+                implementation deps.sqldelight.driverIOs
             }
         }
 

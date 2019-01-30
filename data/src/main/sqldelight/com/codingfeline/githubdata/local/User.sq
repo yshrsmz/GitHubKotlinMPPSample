@@ -8,8 +8,8 @@ CREATE TABLE user (
     email TEXT NOT NULL DEFAULT ""
 );
 
-insertUser:
-INSERT INTO user (id, login, name, bio, avatar_url, company, email)
+upsertUser:
+INSERT OR REPLACE INTO user (id, login, name, bio, avatar_url, company, email)
 VALUES (?, ?, ?, ?, ?, ?, ?);
 
 
