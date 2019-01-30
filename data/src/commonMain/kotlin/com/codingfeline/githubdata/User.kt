@@ -1,8 +1,5 @@
 package com.codingfeline.githubdata
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class User(
     val id: String,
     val login: String,
@@ -10,5 +7,6 @@ data class User(
     val bio: String,
     val avatarUrl: String,
     val company: String,
-    val email: String
+    val email: String,
+    val repositories: List<Repository>
 )

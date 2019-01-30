@@ -1,5 +1,7 @@
 package com.codingfeline.githubdata.remote.response
 
+import com.codingfeline.githubdata.Repository
+import com.codingfeline.githubdata.User
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,10 +16,12 @@ data class UserResponse(
     val repositories: RepositoriesResponse
 )
 
+@Serializable
 data class RepositoriesResponse(
     val nodes: List<RepositoryResponse>
 )
 
+@Serializable
 data class RepositoryResponse(
     val id: String,
     val name: String,
@@ -27,7 +31,33 @@ data class RepositoryResponse(
     val owner: OwnerResponse
 )
 
+@Serializable
 data class OwnerResponse(
     val id: String,
     val login: String
 )
+
+fun RepositoryResponse.toRepository(): Repository {
+    return Repository(
+        id = id,
+        name = name,
+        description = description,
+        updatedAt = updatedAt,
+        url = url,
+        ownerId = owner.id,
+        ownerLogin = owner.login
+    )
+}
+
+fun UserResponse.toUser(): User {
+    return User(
+        id = id,
+        login = login,
+        name = name,
+        bio = bio,
+        avatarUrl = avatarUrl,
+        company = company,
+        email = email,
+        repositories = repositories.nodes.map { it.toRepository() }
+    )
+}

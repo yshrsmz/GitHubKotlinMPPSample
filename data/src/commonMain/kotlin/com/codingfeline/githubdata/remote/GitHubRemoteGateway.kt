@@ -2,6 +2,7 @@ package com.codingfeline.githubdata.remote
 
 import com.codingfeline.githubdata.api.RepositoriesDocument
 import com.codingfeline.githubdata.remote.response.UserResponse
+import com.codingfeline.kgql.core.KgqlError
 import io.ktor.client.HttpClient
 import io.ktor.client.features.HttpClientFeature
 import io.ktor.client.features.json.JsonFeature
@@ -15,12 +16,13 @@ import io.ktor.http.ContentType
 import io.ktor.http.Url
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelineContext
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.list
 
 const val TOKEN = ""
 
 interface GitHubRemoteGateway {
-    suspend fun fetchUserRepository(login: String): UserResponse?
+    suspend fun fetchUserRepository(login: String): KgqlResponse<UserResponse>
 }
 
 class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
@@ -38,8 +40,8 @@ class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
         }
     }
 
-    override suspend fun fetchUserRepository(login: String): UserResponse? {
-        val rawResult = client.post<JsonObject>(endpoint) {
+    override suspend fun fetchUserRepository(login: String): KgqlResponse<UserResponse> {
+        val rawResult = client.post<String>(endpoint) {
             body = RepositoriesDocument.RepositoriesQuery.requestBody(
                 RepositoriesDocument.RepositoriesQuery.Variables(login)
             )
@@ -47,19 +49,28 @@ class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
 
         println("result: $rawResult")
 
-        if (rawResult.containsKey("data")) {
-            if (rawResult["data"].isNull) {
-                return null
-            } else {
-                println("rawData.data: ${rawResult["data"]}")
-                return null
-            }
+        val jsonResult = Json.plain.parseJson(rawResult).jsonObject
+
+        println("result as JsonElement: $jsonResult")
+
+        if (jsonResult.containsKey("data") && !jsonResult["data"].isNull) {
+            println("rawData.data: ${jsonResult["data"].jsonObject["user"]}")
+            return KgqlResponse(
+                data = Json.nonstrict.fromJson(UserResponse.serializer(), jsonResult["data"].jsonObject["user"])
+            )
         } else {
-            return null
+            return KgqlResponse(
+                errors = Json.nonstrict.fromJson(KgqlError.serializer().list, jsonResult["errors"])
+            )
         }
     }
 
 }
+
+data class KgqlResponse<T>(
+    override val data: T? = null,
+    override val errors: List<KgqlError>? = null
+) : com.codingfeline.kgql.core.KgqlResponse<T>
 
 class GitHubAuthHeader(val token: String) {
 

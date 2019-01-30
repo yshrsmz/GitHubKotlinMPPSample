@@ -79,9 +79,12 @@ kotlin {
             }
         }
         androidTest {
+            dependsOn androidMain
             dependencies {
                 implementation deps.kotlin.test.jvm
                 implementation deps.kotlin.test.junit
+
+                implementation deps.robolectric.core
             }
         }
 
