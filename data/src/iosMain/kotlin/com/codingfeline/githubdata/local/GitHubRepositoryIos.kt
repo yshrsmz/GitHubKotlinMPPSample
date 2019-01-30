@@ -1,33 +1,33 @@
 package com.codingfeline.githubdata.local
 
+import com.codingfeline.githubdata.GitHubRepository
 import com.codingfeline.githubdata.MainLoopDispatcher
-import com.codingfeline.githubdata.remote.GitHubRemoteGateway
-import com.codingfeline.githubdata.remote.GitHubRemoteGatewayImpl
-import com.codingfeline.githubdata.remote.response.toUser
-import com.codingfeline.kgql.core.KgqlError
+import com.codingfeline.githubdata.Repository
+import com.codingfeline.githubdata.User
+import com.squareup.sqldelight.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class GitHubRepository : CoroutineScope {
+class GitHubRepositoryIos(private val repository: GitHubRepository) : CoroutineScope {
 
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext = MainLoopDispatcher + job
 
-    val gateway: GitHubRemoteGateway =
-        GitHubRemoteGatewayImpl()
-
-
-    fun fetchUser(login: String, callback: (user: com.codingfeline.githubdata.User?, errors: List<KgqlError>) -> Unit) {
+    fun fetchUser(login: String) {
+        println("fetch user")
         launch {
-            val result = gateway.fetchUserRepository(login)
-
-            callback(result.data?.toUser(), result.errors ?: emptyList())
+            println("fetch user inner")
+            repository.fetchUser(login)
         }
     }
 
-    fun observeUser(login: String, callback: (user: User?) -> Unit) {
+    fun observeUser(login: String): Query<User> {
+        return repository.observeUser(login)
+    }
 
+    fun observeRepositoriesByOwner(login: String): Query<Repository> {
+        return repository.observeRepositoriesByOwner(login)
     }
 }
