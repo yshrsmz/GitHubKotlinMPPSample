@@ -1,5 +1,7 @@
 # GitHubKNSample
 
+Sample Project of Kotlin Multiplatform(Android/iOS).
+
 ## Setup
 
 1. get GitHub API token
