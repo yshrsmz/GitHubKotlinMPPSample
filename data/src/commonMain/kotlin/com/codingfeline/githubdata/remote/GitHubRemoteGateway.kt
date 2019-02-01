@@ -1,5 +1,6 @@
 package com.codingfeline.githubdata.remote
 
+import com.codingfeline.githubdata.BuildKonfig
 import com.codingfeline.githubdata.api.RepositoriesDocument
 import com.codingfeline.githubdata.remote.response.UserResponse
 import com.codingfeline.kgql.core.KgqlError
@@ -19,7 +20,6 @@ import io.ktor.util.pipeline.PipelineContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.list
 
-const val TOKEN = ""
 
 interface GitHubRemoteGateway {
     suspend fun fetchUserRepository(login: String): KgqlResponse<UserResponse>
@@ -31,7 +31,7 @@ class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
 
     private val client: HttpClient = HttpClient {
         install(GitHubAuthHeader.Feature) {
-            token = TOKEN
+            token = BuildKonfig.GITHUB_TOKEN
         }
         install(JsonFeature) {
             serializer = KotlinxSerializer().apply {

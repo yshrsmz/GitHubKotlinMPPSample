@@ -27,6 +27,15 @@ buildscript {
                 excludeGroup "Kotlin/Native"
             }
         }
+        maven {
+            url 'https://dl.bintray.com/yshrsmz/maven'
+            content {
+                excludeGroup "Kotlin/Native"
+            }
+        }
+//        maven {
+//            url "file://${projectDir.absolutePath}/../BuildKonfig/build/localMaven"
+//        }
 //        maven {
 //            url "http://dl.bintray.com/kotlin/kotlin-eap"
 //            content {
@@ -41,6 +50,8 @@ buildscript {
         classpath deps.plugins.versions
         classpath deps.plugins.sqldelight
         classpath deps.plugins.kgql
+
+        classpath deps.plugins.buildkonfig
     }
 }
 

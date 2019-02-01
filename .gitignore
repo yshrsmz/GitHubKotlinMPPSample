@@ -53,5 +53,7 @@ playground.xcworkspace
 #Because ugh
 .DS_Store
 
+secret.properties
+
 !.idea/codeStyles/*
 !.idea/saveactions_settings.xml
