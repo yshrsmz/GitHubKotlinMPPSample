@@ -36,7 +36,9 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+            java.srcDirs += 'src/androidMain/kotlin'
         }
+        test.java.srcDirs += 'src/androidTest/kotlin'
     }
 }
 
