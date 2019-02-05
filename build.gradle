@@ -27,12 +27,6 @@ buildscript {
                 excludeGroup "Kotlin/Native"
             }
         }
-        maven {
-            url 'https://dl.bintray.com/yshrsmz/maven'
-            content {
-                excludeGroup "Kotlin/Native"
-            }
-        }
 //        maven {
 //            url "file://${projectDir.absolutePath}/../BuildKonfig/build/localMaven"
 //        }

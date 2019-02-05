@@ -4,7 +4,7 @@ ext.versions = [
         coroutines   : '1.1.1',
         serialization: '0.10.0',
         dokka        : '0.9.17',
-        sqldelight   : '1.0.2',
+        sqldelight   : '1.0.3',
         ktor         : '1.1.2',
         robolectric  : '4.1'
 ]
@@ -17,8 +17,8 @@ ext.deps = [
                 dokka        : "org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}",
                 versions     : "com.github.ben-manes:gradle-versions-plugin:0.20.0",
                 sqldelight   : "com.squareup.sqldelight:gradle-plugin:1.0.2",
-                kgql         : "com.codingfeline.kgql:gradle-plugin:0.1.0",
-                buildkonfig  : "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.2.0"
+                kgql         : "com.codingfeline.kgql:gradle-plugin:0.1.1",
+                buildkonfig  : "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.2.1"
         ],
         kotlin     : [
                 stdlib       : [
