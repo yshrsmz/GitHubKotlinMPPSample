@@ -2,22 +2,22 @@ package com.codingfeline.githubdata
 
 import com.squareup.sqldelight.Query
 
-class UserDataNotifier(
-    val onUpdate: (User?) -> Unit
-) : QueryNotifier<User> {
+class UserRepositoryDataNotifier(
+    val onUpdate: (repositories: List<Repository>) -> Unit
+) : QueryNotifier<Repository> {
 
-    private var query: Query<User>? = null
+    private var query: Query<Repository>? = null
 
     private val listener = object : Query.Listener {
         override fun queryResultsChanged() {
-            query?.executeAsOneOrNull()?.let(onUpdate)
+            query?.executeAsList()?.let(onUpdate)
         }
     }
 
-    override fun updateQuery(newQuery: Query<User>) {
+    override fun updateQuery(newQuery: Query<Repository>) {
         query?.removeListener(listener)
         query = newQuery
-        newQuery.executeAsOneOrNull().let(onUpdate)
+        newQuery.executeAsList().let(onUpdate)
     }
 
     override fun dispose() {
