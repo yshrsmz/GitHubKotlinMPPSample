@@ -1,9 +1,5 @@
-package com.codingfeline.githubdata.local
+package com.codingfeline.githubdata
 
-import com.codingfeline.githubdata.GitHubRepository
-import com.codingfeline.githubdata.MainLoopDispatcher
-import com.codingfeline.githubdata.Repository
-import com.codingfeline.githubdata.User
 import com.squareup.sqldelight.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
