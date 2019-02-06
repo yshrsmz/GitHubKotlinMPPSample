@@ -6,10 +6,17 @@ import com.codingfeline.githubdata.GitHubRepository
 import com.codingfeline.githubdata.getGitHubRepository
 import com.gojuno.koptional.toOptional
 import com.squareup.sqldelight.runtime.rx.asObservable
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
+
+    private val job = SupervisorJob()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.Main + job
 
     val repository: GitHubRepository by lazy { getGitHubRepository(applicationContext) }
 
@@ -26,8 +33,13 @@ class MainActivity : AppCompatActivity() {
             .subscribe { println("viewer:$it") }
 
 
-        GlobalScope.launch {
+        launch {
             repository.fetchViewer()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }
