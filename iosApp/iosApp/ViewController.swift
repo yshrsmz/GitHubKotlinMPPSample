@@ -17,16 +17,17 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        printCurrentThread(label: "viewDidLoad")
         label.text = Proxy().proxyHello()
-        let login = "yshrsmz"
         
-        let query = repository.observeUser(login: login)
+        let query = repository.observeViewer()
         userNotifier.updateQuery(newQuery: query)
         
-        repository.fetchUser(login: login)
+        repository.fetchViewer()
     }
     
     func onUserUpdate(user: User?) {
+        printCurrentThread(label: "onUserUpdate")
         if (user == nil) {
             NSLog("user is nil")
         } else {
@@ -37,6 +38,7 @@ class ViewController: UIViewController {
     }
     
     func onUserRepoUpdate(repos:[Repository]) {
+        printCurrentThread(label: "onUserRepoUpdate")
         repos.forEach({ (repo) in
             NSLog("repo: \(repo.name)")
         })
@@ -45,5 +47,11 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    func printCurrentThread(label:String)  {
+        NSLog("\(label) - current thread: \(Thread.current), \(OperationQueue.current?.underlyingQueue?.label ?? "None")")
+    }
+    
+    
     @IBOutlet weak var label: UILabel!
 }

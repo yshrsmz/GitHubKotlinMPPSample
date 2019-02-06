@@ -22,7 +22,7 @@ import kotlinx.serialization.list
 
 
 interface GitHubRemoteGateway {
-    suspend fun fetchUserRepository(login: String): KgqlResponse<UserResponse>
+    suspend fun fetchViewerRepository(): KgqlResponse<UserResponse>
 }
 
 class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
@@ -40,19 +40,17 @@ class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
         }
     }
 
-    override suspend fun fetchUserRepository(login: String): KgqlResponse<UserResponse> {
+    override suspend fun fetchViewerRepository(): KgqlResponse<UserResponse> {
         val rawResult = client.post<String>(endpoint) {
-            body = RepositoriesDocument.RepositoriesQuery.requestBody(
-                RepositoriesDocument.RepositoriesQuery.Variables(login)
-            )
+            body = RepositoriesDocument.Query.requestBody()
         }
 
         val jsonResult = Json.plain.parseJson(rawResult).jsonObject
 
         if (jsonResult.containsKey("data") && !jsonResult["data"].isNull) {
-            println("rawData.data: ${jsonResult["data"].jsonObject["user"]}")
+            println("rawData.data: ${jsonResult["data"].jsonObject["viewer"]}")
             return KgqlResponse(
-                data = Json.nonstrict.fromJson(UserResponse.serializer(), jsonResult["data"].jsonObject["user"])
+                data = Json.nonstrict.fromJson(UserResponse.serializer(), jsonResult["data"].jsonObject["viewer"])
             )
         } else {
             return KgqlResponse(

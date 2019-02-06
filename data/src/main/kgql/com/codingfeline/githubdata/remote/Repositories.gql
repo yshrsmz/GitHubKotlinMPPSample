@@ -1,5 +1,5 @@
-query Repositories($login: String!) {
-  user(login: $login) {
+query {
+  viewer {
     id
     login
     name

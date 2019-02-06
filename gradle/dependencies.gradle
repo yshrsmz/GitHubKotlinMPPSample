@@ -17,7 +17,7 @@ ext.deps = [
                 dokka        : "org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}",
                 versions     : "com.github.ben-manes:gradle-versions-plugin:0.20.0",
                 sqldelight   : "com.squareup.sqldelight:gradle-plugin:1.0.2",
-                kgql         : "com.codingfeline.kgql:gradle-plugin:0.1.1",
+                kgql         : "com.codingfeline.kgql:gradle-plugin:0.2.0",
                 buildkonfig  : "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.2.1"
         ],
         kotlin     : [

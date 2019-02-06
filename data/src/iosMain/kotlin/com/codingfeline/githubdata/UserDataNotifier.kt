@@ -1,26 +1,31 @@
 package com.codingfeline.githubdata
 
 import com.squareup.sqldelight.Query
+import kotlin.native.concurrent.AtomicReference
+import kotlin.native.concurrent.isFrozen
 
 class UserDataNotifier(
     val onUpdate: (User?) -> Unit
 ) : QueryNotifier<User> {
 
-    private var query: Query<User>? = null
+    private val query: AtomicReference<Query<User>?> = AtomicReference(null)
 
     private val listener = object : Query.Listener {
         override fun queryResultsChanged() {
-            query?.executeAsOneOrNull()?.let(onUpdate)
+            println("user query results changed")
+            query.value?.executeAsOneOrNull()?.let(onUpdate)
         }
     }
 
     override fun updateQuery(newQuery: Query<User>) {
-        query?.removeListener(listener)
-        query = newQuery
+        println("query frozen?:${query.isFrozen}")
+        query.value?.removeListener(listener)
+        newQuery.addListener(listener)
         newQuery.executeAsOneOrNull().let(onUpdate)
+        query.value = newQuery
     }
 
     override fun dispose() {
-        query?.removeListener(listener)
+        query.value?.removeListener(listener)
     }
 }

@@ -14,6 +14,10 @@ interface GitHubLocalGateway {
 
     fun observeUser(login: String): Query<User>
 
+    fun observeViewer(): Query<User>
+
+    fun observeAllViewer(): Query<Viewer>
+
     fun observeRepositoriesForUser(ownerLogin: String): Query<Repository>
 }
 
@@ -30,6 +34,7 @@ class GitHubLocalGatewayImpl(private val database: Database) : GitHubLocalGatewa
                 company = user.company,
                 email = user.email
             )
+            database.viewerQueries.upsertViewer(user.id)
         }
     }
 
@@ -63,6 +68,17 @@ class GitHubLocalGatewayImpl(private val database: Database) : GitHubLocalGatewa
                 User(id, login2, name, bio, avatar_url, company, email)
             }
         )
+    }
+
+    override fun observeViewer(): Query<User> {
+        return database.viewerQueries.selectViewer(
+            mapper = { id, login, name, bio, avatar_url, company, email ->
+                User(id, login, name, bio, avatar_url, company, email)
+            })
+    }
+
+    override fun observeAllViewer(): Query<Viewer> {
+        return database.viewerQueries.selectAll()
     }
 
     override fun observeRepositoriesForUser(ownerLogin: String): Query<Repository> {

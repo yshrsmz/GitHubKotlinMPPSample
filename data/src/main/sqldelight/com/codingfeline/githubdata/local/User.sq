@@ -8,6 +8,9 @@ CREATE TABLE user (
     email TEXT NOT NULL DEFAULT ""
 );
 
+CREATE INDEX user_login ON user(login);
+CREATE INDEX user_github_id ON user(id);
+
 upsertUser:
 INSERT OR REPLACE INTO user (id, login, name, bio, avatar_url, company, email)
 VALUES (?, ?, ?, ?, ?, ?, ?);

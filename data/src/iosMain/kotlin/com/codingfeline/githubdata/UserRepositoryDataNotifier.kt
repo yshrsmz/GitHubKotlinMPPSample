@@ -1,26 +1,28 @@
 package com.codingfeline.githubdata
 
 import com.squareup.sqldelight.Query
+import kotlin.native.concurrent.AtomicReference
 
 class UserRepositoryDataNotifier(
     val onUpdate: (repositories: List<Repository>) -> Unit
 ) : QueryNotifier<Repository> {
 
-    private var query: Query<Repository>? = null
+    private var query: AtomicReference<Query<Repository>?> = AtomicReference(null)
 
     private val listener = object : Query.Listener {
         override fun queryResultsChanged() {
-            query?.executeAsList()?.let(onUpdate)
+            query.value?.executeAsList()?.let(onUpdate)
         }
     }
 
     override fun updateQuery(newQuery: Query<Repository>) {
-        query?.removeListener(listener)
-        query = newQuery
+        query.value?.removeListener(listener)
+        newQuery.addListener(listener)
         newQuery.executeAsList().let(onUpdate)
+        query.value = newQuery
     }
 
     override fun dispose() {
-        query?.removeListener(listener)
+        query.value?.removeListener(listener)
     }
 }

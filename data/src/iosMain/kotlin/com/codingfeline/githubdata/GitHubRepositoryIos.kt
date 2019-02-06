@@ -11,16 +11,18 @@ class GitHubRepositoryIos(private val repository: GitHubRepository) : CoroutineS
     private val job = SupervisorJob()
     override val coroutineContext: CoroutineContext = MainLoopDispatcher + job
 
-    fun fetchUser(login: String) {
-        println("fetch user")
+    fun fetchViewer() {
         launch {
-            println("fetch user inner")
-            repository.fetchUser(login)
+            repository.fetchViewer()
         }
     }
 
     fun observeUser(login: String): Query<User> {
         return repository.observeUser(login)
+    }
+
+    fun observeViewer(): Query<User> {
+        return repository.observeViewer()
     }
 
     fun observeRepositoriesByOwner(login: String): Query<Repository> {

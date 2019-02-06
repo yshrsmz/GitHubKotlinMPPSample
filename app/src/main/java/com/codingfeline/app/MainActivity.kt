@@ -13,19 +13,21 @@ class MainActivity : AppCompatActivity() {
 
     val repository: GitHubRepository by lazy { getGitHubRepository(applicationContext) }
 
-    val login = "yshrsmz"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        repository.observeUser(login).asObservable()
+        repository.observeViewer().asObservable()
             .map { it.executeAsOneOrNull().toOptional() }
             .subscribe { println("user: ${it.toNullable()}") }
 
+        repository.observeAllViewer().asObservable()
+            .map { it.executeAsList() }
+            .subscribe { println("viewer:$it") }
+
 
         GlobalScope.launch {
-            repository.fetchUser(login)
+            repository.fetchViewer()
         }
     }
 }
