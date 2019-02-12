@@ -48,6 +48,8 @@ dependencies {
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraintLayout
 
+    implementation deps.kodein.jvm
+
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation deps.androidx.test.runner

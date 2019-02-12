@@ -6,6 +6,7 @@ ext.versions = [
         dokka         : '0.9.17',
         sqldelight    : '1.0.3',
         ktor          : '1.1.2',
+        kodein        : '6.1.0',
         robolectric   : '4.1',
         espresso      : '3.1.1',
         androidxSqlite: '2.0.0',
@@ -60,8 +61,13 @@ ext.deps = [
                 jsonIos: "io.ktor:ktor-client-json-native:${versions.ktor}",
         ],
 
+        kodein     : [
+                common: "org.kodein.di:kodein-di-erased:${versions.kodein}",
+                jvm   : "org.kodein.di:kodein-di-erased-jvm:${versions.kodein}"
+        ],
+
         rx         : [
-                core: "io.reactivex.rxjava2:rxjava:2.2.6",
+                core   : "io.reactivex.rxjava2:rxjava:2.2.6",
                 android: "io.reactivex.rxjava2:rxandroid:2.1.0"
         ],
 

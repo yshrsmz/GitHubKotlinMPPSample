@@ -1,19 +1,30 @@
 package com.codingfeline.githubdata
 
-import com.codingfeline.githubdata.local.Db
-import com.codingfeline.githubdata.local.GitHubLocalGatewayImpl
-import com.codingfeline.githubdata.remote.GitHubRemoteGatewayImpl
+import com.codingfeline.githubdata.local.Database
+import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.drivers.ios.NativeSqliteDriver
+import org.kodein.di.Kodein
+import org.kodein.di.direct
+import org.kodein.di.erased.bind
+import org.kodein.di.erased.eagerSingleton
+import org.kodein.di.erased.instance
 
-fun getGitHubRepository(): GitHubRepositoryIos {
-    if (!Db.ready) {
-        Db.defaultDriver()
+internal fun appModule(): Kodein.Module {
+    return Kodein.Module(name = "app") {
+        bind<SqlDriver>() with eagerSingleton { NativeSqliteDriver(Database.Schema, "github.db") }
+        bind<GitHubRepositoryIos>() with eagerSingleton { GitHubRepositoryIos(instance()) }
     }
-
-    return GitHubRepositoryIos(
-        repository = GitHubRepositoryImpl(
-            localGateway = GitHubLocalGatewayImpl(Db.instance),
-            remoteGateway = GitHubRemoteGatewayImpl()
-        )
-    )
 }
 
+fun initKodein(): Kodein {
+    return Kodein {
+        import(remoteModule)
+        import(localModule)
+        import(dataModule)
+        import(appModule())
+    }
+}
+
+fun getGitHubRepository(kodein: Kodein): GitHubRepositoryIos {
+    return kodein.direct.instance()
+}

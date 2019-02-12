@@ -79,6 +79,8 @@ kotlin {
 
                 implementation deps.ktor.core
                 implementation deps.ktor.json
+
+                implementation deps.kodein.common
             }
         }
         commonTest {

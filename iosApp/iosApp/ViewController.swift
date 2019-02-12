@@ -3,7 +3,9 @@ import data
 
 class ViewController: UIViewController {
     
-    let repository = DataModuleKt.getGitHubRepository()
+    let kodein = DataModuleKt.doInitKodein()
+    
+    lazy var repository:GitHubRepositoryIos = { DataModuleKt.getGitHubRepository(kodein: self.kodein) }()
     
     lazy var repoNotifier = UserRepositoryDataNotifier { (repos) -> KotlinUnit in
         self.onUserRepoUpdate(repos: repos)

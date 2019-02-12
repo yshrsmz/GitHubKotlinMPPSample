@@ -1,13 +1,10 @@
 package com.codingfeline.githubdata.remote
 
-import com.codingfeline.githubdata.BuildKonfig
 import com.codingfeline.githubdata.api.RepositoriesDocument
 import com.codingfeline.githubdata.remote.response.UserResponse
 import com.codingfeline.kgql.core.KgqlError
 import io.ktor.client.HttpClient
 import io.ktor.client.features.HttpClientFeature
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.request.HttpRequestPipeline
 import io.ktor.client.request.accept
@@ -25,20 +22,11 @@ interface GitHubRemoteGateway {
     suspend fun fetchViewerRepository(): KgqlResponse<UserResponse>
 }
 
-class GitHubRemoteGatewayImpl : GitHubRemoteGateway {
+class GitHubRemoteGatewayImpl(
+    private val client: HttpClient
+) : GitHubRemoteGateway {
 
     private val endpoint = Url("https://api.github.com/graphql")
-
-    private val client: HttpClient = HttpClient {
-        install(GitHubAuthHeader.Feature) {
-            token = BuildKonfig.GITHUB_TOKEN
-        }
-        install(JsonFeature) {
-            serializer = KotlinxSerializer().apply {
-                setMapper(UserResponse::class, UserResponse.serializer())
-            }
-        }
-    }
 
     override suspend fun fetchViewerRepository(): KgqlResponse<UserResponse> {
         val rawResult = client.post<String>(endpoint) {
