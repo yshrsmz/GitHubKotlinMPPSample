@@ -1,7 +1,7 @@
 package com.codingfeline.app
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.codingfeline.githubdata.GitHubRepository
 import com.codingfeline.githubdata.getGitHubRepository
 import com.gojuno.koptional.toOptional

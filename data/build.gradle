@@ -62,7 +62,7 @@ kotlin {
     def iosTargetName = project.findProperty("kotlin.target") ?: "iosX64"
     def iosTarget = presets.getByName(iosTargetName)
 
-    android("android")
+    android()
 
     targetFromPreset(iosTarget, "ios") {
         binaries {
@@ -88,7 +88,6 @@ kotlin {
             }
         }
         androidMain {
-            dependsOn commonMain
             dependencies {
                 implementation deps.kotlin.stdlib.jdk7
                 implementation deps.kotlin.coroutines.android
@@ -97,11 +96,11 @@ kotlin {
                 implementation deps.ktor.android
                 implementation deps.ktor.jsonJvm
 
-                implementation deps.sqldelight.driverAndroid
+                api deps.sqldelight.driverAndroid
+                implementation deps.androidx.sqlite
             }
         }
         androidTest {
-            dependsOn androidMain
             dependencies {
                 implementation deps.kotlin.test.jvm
                 implementation deps.kotlin.test.junit
