@@ -88,6 +88,7 @@ kotlin {
             }
         }
         androidMain {
+            dependsOn commonMain
             dependencies {
                 implementation deps.kotlin.stdlib.jdk7
                 implementation deps.kotlin.coroutines.android
@@ -101,6 +102,7 @@ kotlin {
             }
         }
         androidTest {
+            dependsOn androidMain
             dependencies {
                 implementation deps.kotlin.test.jvm
                 implementation deps.kotlin.test.junit

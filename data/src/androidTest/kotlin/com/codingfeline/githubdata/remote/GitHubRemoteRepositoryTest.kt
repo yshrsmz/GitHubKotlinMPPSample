@@ -21,7 +21,7 @@ class GitHubRemoteRepositoryTest {
     @Test
     fun test() {
         runBlocking {
-            val user = gateway.fetchViewerRepository("yshrsmz")
+            val user = gateway.fetchViewerRepository()
 
             println(user)
         }
