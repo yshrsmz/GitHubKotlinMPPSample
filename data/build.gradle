@@ -42,6 +42,10 @@ android {
     }
 }
 
+dependencies {
+
+}
+
 sqldelight {
     packageName = 'com.codingfeline.githubdata.local'
 }
@@ -101,6 +105,8 @@ kotlin {
 
                 api deps.sqldelight.driverAndroid
                 implementation deps.androidx.sqlite
+
+                api deps.androidx.arch.viewmodel
             }
         }
         androidTest {

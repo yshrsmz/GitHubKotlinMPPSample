@@ -36,6 +36,8 @@ class GitHubLocalGatewayImpl(private val database: Database) : GitHubLocalGatewa
             )
             database.viewerQueries.upsertViewer(user.id)
         }
+        // List<T> -> [T]
+        // SomeType<T> -> SomeType<Any>
     }
 
     override fun saveRepositories(repositories: List<Repository>) {

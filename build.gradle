@@ -17,9 +17,6 @@ buildscript {
 //        }
 //        maven {
 //            url "http://dl.bintray.com/kotlin/kotlin-eap"
-//            content {
-//                excludeGroup "Kotlin/Native"
-//            }
 //        }
     }
     dependencies {
@@ -40,14 +37,14 @@ allprojects {
         mavenCentral()
         maven { url 'https://dl.bintray.com/kotlin/kotlinx' }
         maven { url 'https://dl.bintray.com/kotlin/ktor' }
-        maven { url 'https://dl.bintray.com/yshrsmz/kgql'        }
+        maven { url 'https://dl.bintray.com/yshrsmz/kgql' }
 //        maven {
 //            url "http://dl.bintray.com/kotlin/kotlin-eap"
 //            content {
 //                excludeGroup "Kotlin/Native"
 //            }
 //        }
-        jcenter().content() { excludeGroup "Kotlin/Native" }
+        jcenter()
     }
 }
 
