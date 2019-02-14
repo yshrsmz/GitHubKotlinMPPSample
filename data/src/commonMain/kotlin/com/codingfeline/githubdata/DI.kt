@@ -15,6 +15,11 @@ import org.kodein.di.erased.bind
 import org.kodein.di.erased.eagerSingleton
 import org.kodein.di.erased.instance
 
+object Tags {
+    const val UI_CONTEXT = "uicontext"
+    const val BG_CONTEXT = "bgcontext"
+}
+
 val remoteModule = Kodein.Module(name = "remote") {
     bind<HttpClient>() with eagerSingleton {
         HttpClient {

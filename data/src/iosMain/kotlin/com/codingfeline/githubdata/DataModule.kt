@@ -10,7 +10,6 @@ import org.kodein.di.direct
 import org.kodein.di.erased.bind
 import org.kodein.di.erased.eagerSingleton
 import org.kodein.di.erased.instance
-import org.kodein.di.erased.provider
 import kotlin.coroutines.CoroutineContext
 
 internal fun appModule(): Kodein.Module {
@@ -31,7 +30,8 @@ internal fun appModule(): Kodein.Module {
             )
         }
         bind<GitHubRepositoryIos>() with eagerSingleton { GitHubRepositoryIos(instance()) }
-        bind<CoroutineContext>(tag = "uicontext") with provider { ApplicationDispatcher }
+        bind<CoroutineContext>(tag = Tags.UI_CONTEXT) with instance(ApplicationDispatcher)
+        bind<CoroutineContext>(tag = Tags.BG_CONTEXT) with instance(ApplicationDispatcher)
     }
 }
 
@@ -41,8 +41,6 @@ fun initKodein(): Kodein {
         import(localModule)
         import(dataModule)
         import(appModule())
-    }.also { kodein ->
-
     }
 }
 
