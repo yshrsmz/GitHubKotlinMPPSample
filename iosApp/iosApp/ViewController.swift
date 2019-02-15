@@ -41,9 +41,10 @@ class ViewController: UIViewController {
     
     func onUserRepoUpdate(repos:[Repository]) {
         printCurrentThread(label: "onUserRepoUpdate")
-        repos.forEach({ (repo) in
-            NSLog("repo: \(repo.name)")
-        })
+        NSLog("repos: \(repos.count)", <#T##args: CVarArg...##CVarArg#>)
+//        repos.forEach({ (repo) in
+//            NSLog("repo: \(repo.name)")
+//        })
     }
 
     override func didReceiveMemoryWarning() {

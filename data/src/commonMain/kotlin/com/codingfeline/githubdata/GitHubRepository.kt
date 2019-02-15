@@ -25,7 +25,11 @@ class GitHubRepositoryImpl(
 ) : GitHubRepository {
 
     override suspend fun fetchViewer() {
+        printCurrentThread()
         println("GithubRepository#fetchViewer")
+        checkIfFrozen("GitHubRepositoryImpl$this", this)
+        checkIfFrozen("localGateway", localGateway)
+        checkIfFrozen("remoteGateway", remoteGateway)
         val result = remoteGateway.fetchViewerRepository()
 
         if (result.data != null) {

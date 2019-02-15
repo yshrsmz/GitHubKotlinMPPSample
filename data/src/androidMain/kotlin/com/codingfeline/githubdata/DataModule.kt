@@ -12,7 +12,7 @@ import org.kodein.di.erased.instance
 internal fun appModule(context: Context): Kodein.Module {
     return Kodein.Module(name = "app") {
         bind<Context>() with instance(context)
-        bind<SqlDriver>() with eagerSingleton { AndroidSqliteDriver(Database.Schema, instance(), "github.db") }
+        bind<SqlDriver>() with eagerSingleton { AndroidSqliteDriver(Database.Schema, instance(), null) }
     }
 }
 
