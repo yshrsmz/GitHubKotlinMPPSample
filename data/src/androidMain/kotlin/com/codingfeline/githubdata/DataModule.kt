@@ -7,16 +7,17 @@ import com.squareup.sqldelight.db.SqlDriver
 import kotlinx.coroutines.Dispatchers
 import org.kodein.di.Kodein
 import org.kodein.di.erased.bind
-import org.kodein.di.erased.eagerSingleton
 import org.kodein.di.erased.instance
 import org.kodein.di.erased.provider
+import org.kodein.di.erased.singleton
 import kotlin.coroutines.CoroutineContext
 
 internal fun appModule(context: Context): Kodein.Module {
     return Kodein.Module(name = "app") {
         bind<Context>() with instance(context)
-        bind<SqlDriver>() with eagerSingleton { AndroidSqliteDriver(Database.Schema, instance(), null) }
-        bind<CoroutineContext>(tag = "uicontext") with provider { Dispatchers.Main }
+        bind<SqlDriver>() with singleton { AndroidSqliteDriver(Database.Schema, instance(), null) }
+        bind<CoroutineContext>(Tags.UI_CONTEXT) with provider { Dispatchers.Main }
+        bind<CoroutineContext>(Tags.BG_CONTEXT) with provider { Dispatchers.IO }
     }
 }
 

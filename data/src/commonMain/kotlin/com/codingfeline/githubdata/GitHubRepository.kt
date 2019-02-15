@@ -1,28 +1,33 @@
 package com.codingfeline.githubdata
 
 import com.codingfeline.githubdata.local.GitHubLocalGateway
-import com.codingfeline.githubdata.local.Viewer
 import com.codingfeline.githubdata.remote.GitHubRemoteGateway
 import com.codingfeline.githubdata.remote.response.toUserAndRepositories
 import com.squareup.sqldelight.Query
+import kotlin.native.concurrent.ThreadLocal
 
 interface GitHubRepository {
+    val localGateway: GitHubLocalGateway
 
     suspend fun fetchViewer()
 
-    fun observeUser(login: String): Query<User>
+    fun selectViewer(): Query<User>
 
-    fun observeViewer(): Query<User>
+    fun selectRepositoriesByOwner(login: String): Query<Repository>
 
-    fun observeRepositoriesByOwner(login: String): Query<Repository>
-
-    fun observeAllViewer(): Query<Viewer>
+    fun selectRepositoriesForViewer(): Query<Repository>
 }
 
 class GitHubRepositoryImpl(
-    private val localGateway: GitHubLocalGateway,
-    private val remoteGateway: GitHubRemoteGateway
+    @ThreadLocal override val localGateway: GitHubLocalGateway,
+    @ThreadLocal private val remoteGateway: GitHubRemoteGateway
 ) : GitHubRepository {
+
+    init {
+        println("GitHubRepositoryImpl#init---")
+        printCurrentThread()
+        checkIfFrozen("GitHubRepositoryImpl", this)
+    }
 
     override suspend fun fetchViewer() {
         printCurrentThread()
@@ -30,6 +35,7 @@ class GitHubRepositoryImpl(
         checkIfFrozen("GitHubRepositoryImpl$this", this)
         checkIfFrozen("localGateway", localGateway)
         checkIfFrozen("remoteGateway", remoteGateway)
+
         val result = remoteGateway.fetchViewerRepository()
 
         if (result.data != null) {
@@ -42,20 +48,16 @@ class GitHubRepositoryImpl(
         }
     }
 
-    override fun observeUser(login: String): Query<User> {
-        return localGateway.observeUser(login)
+    override fun selectViewer(): Query<User> {
+        return localGateway.selectViewer()
     }
 
-    override fun observeViewer(): Query<User> {
-        return localGateway.observeViewer()
+    override fun selectRepositoriesByOwner(login: String): Query<Repository> {
+        return localGateway.selectRepositoriesForUser(login)
     }
 
-    override fun observeAllViewer(): Query<Viewer> {
-        return localGateway.observeAllViewer()
-    }
-
-    override fun observeRepositoriesByOwner(login: String): Query<Repository> {
-        return localGateway.observeRepositoriesForUser(login)
+    override fun selectRepositoriesForViewer(): Query<Repository> {
+        return localGateway.selectRepositoriesForViewer()
     }
 
 }

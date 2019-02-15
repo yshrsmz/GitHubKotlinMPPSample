@@ -66,11 +66,36 @@ kotlin {
     def iosTargetName = project.findProperty("kotlin.target") ?: "iosX64"
     def iosTarget = presets.getByName(iosTargetName)
 
-    android()
+    android {
+        compilations.all {
+            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+                kotlinOptions {
+                    freeCompilerArgs = [
+                            '-Xuse-experimental=kotlin.Experimental',
+                            '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                            '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi'
+                    ]
+                }
+            }
+        }
+    }
 
     targetFromPreset(iosTarget, "ios") {
         binaries {
             framework()
+        }
+    }
+
+    targets.all { target ->
+        if (target.name == 'android') return // Android handles this differently
+        compilations.all { compilation ->
+            tasks[compileKotlinTaskName].kotlinOptions {
+                freeCompilerArgs = [
+                        '-Xuse-experimental=kotlin.Experimental',
+                        '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                        '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi'
+                ]
+            }
         }
     }
 

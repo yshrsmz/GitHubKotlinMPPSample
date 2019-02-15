@@ -11,6 +11,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.native.concurrent.ThreadLocal
 
 interface Intent
 interface Action
@@ -73,11 +74,13 @@ abstract class MviViewModel<E : Intent, S : State>(
 @ExperimentalCoroutinesApi
 abstract class MviViewModel2<R : Result, S : State, E : Effect>(
     initialState: () -> S,
-    bgContext: CoroutineContext
+    @ThreadLocal val bgContext: CoroutineContext
 ) : ViewModel(), CoroutineScope {
 
+    @ThreadLocal
     private val job = SupervisorJob()
 
+    @ThreadLocal
     override val coroutineContext: CoroutineContext = bgContext + job
 
     private var _state: S = initialState()
@@ -101,6 +104,10 @@ abstract class MviViewModel2<R : Result, S : State, E : Effect>(
 
     protected suspend fun sendResult(result: R) {
         results.send(result)
+    }
+
+    protected fun offerResult(result: R) {
+        results.offer(result)
     }
 
     protected abstract fun reduce(result: R, previousState: S): S

@@ -1,11 +1,11 @@
 CREATE TABLE viewer (
-    id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
+    id INTEGER PRIMARY KEY NOT NULL DEFAULT 1,
     github_id TEXT NOT NULL
 );
 
 upsertViewer:
 INSERT OR REPLACE INTO viewer(id, github_id)
-VALUES (0, ?);
+VALUES (1, ?);
 
 
 selectAll:
@@ -18,4 +18,4 @@ SELECT user.*
 FROM user
 INNER JOIN viewer
 ON user.id = viewer.github_id
-WHERE viewer.id = 0;
+WHERE viewer.id = 1;

@@ -26,7 +26,16 @@ android {
     packagingOptions {
         exclude 'META-INF/*.kotlin_module'
     }
+}
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs = [
+                '-Xuse-experimental=kotlin.Experimental',
+                '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi'
+        ]
+    }
 }
 
 dependencies {

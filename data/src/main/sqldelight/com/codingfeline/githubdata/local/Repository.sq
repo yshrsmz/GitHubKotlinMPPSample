@@ -19,3 +19,10 @@ forUser:
 SELECT *
 FROM repository
 WHERE owner_login = ?;
+
+selectViewerRepositories:
+SELECT repository.*
+FROM repository
+INNER JOIN viewer
+WHERE viewer.github_id = repository.owner_id
+AND viewer.id = 1;

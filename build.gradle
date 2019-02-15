@@ -40,9 +40,6 @@ allprojects {
         maven { url 'https://dl.bintray.com/yshrsmz/kgql' }
 //        maven {
 //            url "http://dl.bintray.com/kotlin/kotlin-eap"
-//            content {
-//                excludeGroup "Kotlin/Native"
-//            }
 //        }
         jcenter()
     }

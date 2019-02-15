@@ -5,43 +5,35 @@ class ViewController: UIViewController {
     
     let kodein = DataModuleKt.doInitKodein()
     
-    lazy var repository:GitHubRepositoryIos = { DataModuleKt.getGitHubRepository(kodein: self.kodein) }()
+    lazy var viewerKodein = ViewerModuleKt.getViewerKodein(dataKodein: self.kodein)
     
-    lazy var repoNotifier = UserRepositoryDataNotifier { (repos) -> KotlinUnit in
-        self.onUserRepoUpdate(repos: repos)
-        return KotlinUnit()
-    }
-    
-    lazy var userNotifier = UserDataNotifier { (user) -> KotlinUnit in
-        self.onUserUpdate(user: user)
-        return KotlinUnit()
-    }
+    lazy var repository = DataModuleKt.getGitHubRepository(kodein: self.viewerKodein)
+
+//
+    lazy var viewModel:ViewerViewModel = {ViewerModuleKt.getViewerViewModel(viewerKodein: self.viewerKodein)}()
+
+    lazy var notifier:ViewerViewModelStateNotifier = ViewerModuleKt.getViewerViewModelStateNotifier(viewerKodein: self.viewerKodein)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        printCurrentThread(label: "viewDidLoad")
         label.text = Proxy().proxyHello()
         
-        let query = repository.observeViewer()
-        userNotifier.updateQuery(newQuery: query)
+        viewModel.doInit()
         
-        repository.fetchViewer()
-    }
-    
-    func onUserUpdate(user: User?) {
-        printCurrentThread(label: "onUserUpdate")
-        if (user == nil) {
-            NSLog("user is nil")
-        } else {
-            NSLog("user is \(user)")
-            let repoQuery = repository.observeRepositoriesByOwner(login: user!.login)
-            repoNotifier.updateQuery(newQuery: repoQuery)
+        notifier.stateChanged(viewModel: viewModel) { (state:ViewerState) -> KotlinUnit in
+            NSLog("state: \(state)")
+            if (state is ViewerState.Data) {
+                let data = state as! ViewerState.Data
+                NSLog("user: \(data.user)")
+            }
+            return KotlinUnit()
         }
+        
+//        repository.fetchViewer()
     }
     
     func onUserRepoUpdate(repos:[Repository]) {
-        printCurrentThread(label: "onUserRepoUpdate")
-        NSLog("repos: \(repos.count)", <#T##args: CVarArg...##CVarArg#>)
+        NSLog("repos: \(repos.count)")
 //        repos.forEach({ (repo) in
 //            NSLog("repo: \(repo.name)")
 //        })
@@ -50,11 +42,6 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    func printCurrentThread(label:String)  {
-        NSLog("\(label) - current thread: \(Thread.current), \(OperationQueue.current?.underlyingQueue?.label ?? "None")")
-    }
-    
     
     @IBOutlet weak var label: UILabel!
 }

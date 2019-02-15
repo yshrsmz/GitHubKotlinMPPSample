@@ -12,8 +12,8 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import org.kodein.di.Kodein
 import org.kodein.di.erased.bind
-import org.kodein.di.erased.eagerSingleton
 import org.kodein.di.erased.instance
+import org.kodein.di.erased.singleton
 
 object Tags {
     const val UI_CONTEXT = "uicontext"
@@ -21,7 +21,7 @@ object Tags {
 }
 
 val remoteModule = Kodein.Module(name = "remote") {
-    bind<HttpClient>() with eagerSingleton {
+    bind<HttpClient>() with singleton {
         HttpClient {
             install(GitHubAuthHeader.Feature) {
                 token = BuildKonfig.GITHUB_TOKEN
@@ -33,16 +33,16 @@ val remoteModule = Kodein.Module(name = "remote") {
             }
         }
     }
-    bind<GitHubRemoteGateway>() with eagerSingleton {
+    bind<GitHubRemoteGateway>() with singleton {
         GitHubRemoteGatewayImpl(instance())
     }
 }
 
 val localModule = Kodein.Module(name = "local") {
-    bind<Database>() with eagerSingleton { Database(instance()) }
-    bind<GitHubLocalGateway>() with eagerSingleton { GitHubLocalGatewayImpl(instance()) }
+    bind<Database>() with singleton { Database(instance()) }
+    bind<GitHubLocalGateway>() with singleton { GitHubLocalGatewayImpl(instance()) }
 }
 
 val dataModule = Kodein.Module(name = "data") {
-    bind<GitHubRepository>() with eagerSingleton { GitHubRepositoryImpl(instance(), instance()) }
+    bind<GitHubRepository>() with singleton { GitHubRepositoryImpl(instance(), instance()) }
 }

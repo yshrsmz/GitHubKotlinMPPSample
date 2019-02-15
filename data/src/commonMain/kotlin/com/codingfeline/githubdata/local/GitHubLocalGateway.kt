@@ -12,13 +12,15 @@ interface GitHubLocalGateway {
 
     fun saveUserAndRepositories(user: User, repositories: List<Repository>)
 
-    fun observeUser(login: String): Query<User>
+    fun selectUser(login: String): Query<User>
 
-    fun observeViewer(): Query<User>
+    fun selectViewer(): Query<User>
 
-    fun observeAllViewer(): Query<Viewer>
+    fun selectAllViewer(): Query<Viewer>
 
-    fun observeRepositoriesForUser(ownerLogin: String): Query<Repository>
+    fun selectRepositoriesForUser(ownerLogin: String): Query<Repository>
+
+    fun selectRepositoriesForViewer(): Query<Repository>
 }
 
 class GitHubLocalGatewayImpl(private val database: Database) : GitHubLocalGateway {
@@ -63,7 +65,7 @@ class GitHubLocalGatewayImpl(private val database: Database) : GitHubLocalGatewa
         }
     }
 
-    override fun observeUser(login: String): Query<User> {
+    override fun selectUser(login: String): Query<User> {
         return database.userQueries.select(
             login = login,
             mapper = { id, login2, name, bio, avatar_url, company, email ->
@@ -72,20 +74,28 @@ class GitHubLocalGatewayImpl(private val database: Database) : GitHubLocalGatewa
         )
     }
 
-    override fun observeViewer(): Query<User> {
+    override fun selectViewer(): Query<User> {
         return database.viewerQueries.selectViewer(
             mapper = { id, login, name, bio, avatar_url, company, email ->
                 User(id, login, name, bio, avatar_url, company, email)
             })
     }
 
-    override fun observeAllViewer(): Query<Viewer> {
+    override fun selectAllViewer(): Query<Viewer> {
         return database.viewerQueries.selectAll()
     }
 
-    override fun observeRepositoriesForUser(ownerLogin: String): Query<Repository> {
+    override fun selectRepositoriesForUser(ownerLogin: String): Query<Repository> {
         return database.repositoryQueries.forUser(
             owner_login = ownerLogin,
+            mapper = { id, name, description, updated_at, url, owner_id, owner_login ->
+                Repository(id, name, description, updated_at, url, owner_id, owner_login)
+            }
+        )
+    }
+
+    override fun selectRepositoriesForViewer(): Query<Repository> {
+        return database.repositoryQueries.selectViewerRepositories(
             mapper = { id, name, description, updated_at, url, owner_id, owner_login ->
                 Repository(id, name, description, updated_at, url, owner_id, owner_login)
             }

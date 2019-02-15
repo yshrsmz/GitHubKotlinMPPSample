@@ -8,13 +8,14 @@ import com.squareup.sqldelight.drivers.ios.wrapConnection
 import org.kodein.di.Kodein
 import org.kodein.di.direct
 import org.kodein.di.erased.bind
-import org.kodein.di.erased.eagerSingleton
 import org.kodein.di.erased.instance
+import org.kodein.di.erased.provider
+import org.kodein.di.erased.singleton
 import kotlin.coroutines.CoroutineContext
 
 internal fun appModule(): Kodein.Module {
     return Kodein.Module(name = "app") {
-        bind<SqlDriver>() with eagerSingleton {
+        bind<SqlDriver>() with singleton {
             //NativeSqliteDriver(Database.Schema, null)
             NativeSqliteDriver(
                 configuration = DatabaseConfiguration(
@@ -29,9 +30,8 @@ internal fun appModule(): Kodein.Module {
                 )
             )
         }
-        bind<GitHubRepositoryIos>() with eagerSingleton { GitHubRepositoryIos(instance()) }
-        bind<CoroutineContext>(tag = Tags.UI_CONTEXT) with instance(ApplicationDispatcher)
-        bind<CoroutineContext>(tag = Tags.BG_CONTEXT) with instance(ApplicationDispatcher)
+        bind<CoroutineContext>(tag = Tags.UI_CONTEXT) with provider { MainLoopDispatcher }
+        bind<CoroutineContext>(tag = Tags.BG_CONTEXT) with provider { MainLoopDispatcher }
     }
 }
 

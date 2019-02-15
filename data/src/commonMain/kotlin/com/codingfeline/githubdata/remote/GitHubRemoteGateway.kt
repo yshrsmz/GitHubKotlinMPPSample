@@ -1,6 +1,7 @@
 package com.codingfeline.githubdata.remote
 
 import com.codingfeline.githubdata.api.RepositoriesDocument
+import com.codingfeline.githubdata.checkIfFrozen
 import com.codingfeline.githubdata.remote.response.UserResponse
 import com.codingfeline.kgql.core.KgqlError
 import io.ktor.client.HttpClient
@@ -16,6 +17,7 @@ import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelineContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.list
+import kotlin.native.concurrent.ThreadLocal
 
 
 interface GitHubRemoteGateway {
@@ -23,12 +25,15 @@ interface GitHubRemoteGateway {
 }
 
 class GitHubRemoteGatewayImpl(
-    private val client: HttpClient
+    @ThreadLocal private val client: HttpClient
 ) : GitHubRemoteGateway {
 
     private val endpoint = Url("https://api.github.com/graphql")
 
     override suspend fun fetchViewerRepository(): KgqlResponse<UserResponse> {
+        checkIfFrozen("client", client)
+        checkIfFrozen("GitHubRemoteRepositoryImpl", this)
+
         val rawResult = client.post<String>(endpoint) {
             body = RepositoriesDocument.Query.requestBody()
         }
