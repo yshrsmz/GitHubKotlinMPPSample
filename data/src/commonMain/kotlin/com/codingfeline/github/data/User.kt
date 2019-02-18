@@ -1,4 +1,4 @@
-package com.codingfeline.githubdata
+package com.codingfeline.github.data
 
 data class User(
     val id: String,

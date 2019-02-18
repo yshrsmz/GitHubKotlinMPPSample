@@ -1,8 +1,7 @@
-package com.codingfeline.githubdata.remote
+package com.codingfeline.github.data.remote
 
-import com.codingfeline.githubdata.api.RepositoriesDocument
-import com.codingfeline.githubdata.checkIfFrozen
-import com.codingfeline.githubdata.remote.response.UserResponse
+import com.codingfeline.github.data.remote.response.UserResponse
+import com.codingfeline.github.platform.checkIfFrozen
 import com.codingfeline.kgql.core.KgqlError
 import io.ktor.client.HttpClient
 import io.ktor.client.features.HttpClientFeature

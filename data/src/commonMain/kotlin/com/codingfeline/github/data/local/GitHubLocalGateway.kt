@@ -1,7 +1,7 @@
-package com.codingfeline.githubdata.local
+package com.codingfeline.github.data.local
 
-import com.codingfeline.githubdata.Repository
-import com.codingfeline.githubdata.User
+import com.codingfeline.github.data.Repository
+import com.codingfeline.github.data.User
 import com.squareup.sqldelight.Query
 
 interface GitHubLocalGateway {

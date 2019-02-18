@@ -1,8 +1,8 @@
-package com.codingfeline.githubdata.remote.response
+package com.codingfeline.github.data.remote.response
 
-import com.codingfeline.githubdata.Repository
-import com.codingfeline.githubdata.User
-import com.codingfeline.githubdata.UserAndRepositories
+import com.codingfeline.github.data.Repository
+import com.codingfeline.github.data.User
+import com.codingfeline.github.data.UserAndRepositories
 import kotlinx.serialization.Serializable
 
 @Serializable

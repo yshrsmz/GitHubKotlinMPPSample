@@ -1,4 +1,4 @@
-package com.codingfeline.githubdata.local
+package com.codingfeline.github.data.local
 
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.drivers.ios.NativeSqliteDriver

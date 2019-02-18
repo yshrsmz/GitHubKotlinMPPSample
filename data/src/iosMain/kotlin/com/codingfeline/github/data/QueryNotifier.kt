@@ -1,4 +1,4 @@
-package com.codingfeline.githubdata
+package com.codingfeline.github.data
 
 import com.squareup.sqldelight.Query
 

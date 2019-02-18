@@ -1,7 +1,7 @@
-package com.codingfeline.githubdata
+package com.codingfeline.github.data
 
-import com.codingfeline.githubdomain.FetchViewer
-import com.codingfeline.githubdomain.ObserveViewer
+import com.codingfeline.github.domain.FetchViewer
+import com.codingfeline.github.domain.ObserveViewer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob

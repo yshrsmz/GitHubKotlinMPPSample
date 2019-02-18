@@ -1,4 +1,4 @@
-package com.codingfeline.githubdata
+package com.codingfeline.github.data
 
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineDispatcher

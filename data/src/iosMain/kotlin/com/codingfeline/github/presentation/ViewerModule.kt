@@ -1,10 +1,10 @@
-package com.codingfeline.githubui
+package com.codingfeline.github.presentation
 
-import com.codingfeline.githubdata.GitHubRepositoryIos
-import com.codingfeline.githubdata.Tags
-import com.codingfeline.githubdomain.FetchViewer
-import com.codingfeline.githubdomain.ObserveViewer
-import com.codingfeline.githubdomain.ObserveViewerRepositories
+import com.codingfeline.github.Tags
+import com.codingfeline.github.data.GitHubRepositoryIos
+import com.codingfeline.github.domain.FetchViewer
+import com.codingfeline.github.domain.ObserveViewer
+import com.codingfeline.github.domain.ObserveViewerRepositories
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -44,6 +44,16 @@ fun getViewerKodein(dataKodein: Kodein): Kodein {
                 instance(Tags.BG_CONTEXT)
             )
         }
+
+        bind<MainViewModel>() with provider {
+            MainViewModel(
+                instance(Tags.BG_CONTEXT),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
+        }
     }
 }
 
@@ -60,6 +70,9 @@ fun getViewerViewModelStateNotifier(viewerKodein: Kodein): ViewerViewModelStateN
     return viewerKodein.direct.instance()
 }
 
+fun getMainViewModel(viewerKodein: Kodein): MainViewModel {
+    return viewerKodein.direct.instance()
+}
 
 @ExperimentalCoroutinesApi
 @ObsoleteCoroutinesApi

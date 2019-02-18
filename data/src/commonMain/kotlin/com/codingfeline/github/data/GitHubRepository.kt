@@ -1,8 +1,10 @@
-package com.codingfeline.githubdata
+package com.codingfeline.github.data
 
-import com.codingfeline.githubdata.local.GitHubLocalGateway
-import com.codingfeline.githubdata.remote.GitHubRemoteGateway
-import com.codingfeline.githubdata.remote.response.toUserAndRepositories
+import com.codingfeline.github.data.local.GitHubLocalGateway
+import com.codingfeline.github.data.remote.GitHubRemoteGateway
+import com.codingfeline.github.data.remote.response.toUserAndRepositories
+import com.codingfeline.github.platform.checkIfFrozen
+import com.codingfeline.github.platform.printCurrentThread
 import com.squareup.sqldelight.Query
 import kotlin.native.concurrent.ThreadLocal
 
