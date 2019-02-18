@@ -194,3 +194,22 @@ task copyFramework {
         }
     }
 }
+
+task iosTest {
+    def device = project.findProperty("iosDevice")?.toString() ?: "iPhone 8"
+    def buildType = project.findProperty("kotlin.build.type") ?: "DEBUG"
+
+    kotlin.targets.ios.compilations.test.target.binaries.forEach { b ->
+        println("b: ${b.name} ${b.baseName}, ${b.buildType}")
+    }
+
+    def bin = kotlin.targets.ios.compilations.test.target.binaries.findExecutable("test", buildType)
+    dependsOn bin.linkTask
+
+    doLast {
+        println("outputPath: ${bin.outputFile.absolutePath}")
+        exec {
+            commandLine "xcrun", "simctl", "spawn", device, bin.outputFile.absolutePath
+        }
+    }
+}
