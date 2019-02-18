@@ -47,15 +47,15 @@ dependencies {
 }
 
 sqldelight {
-    packageName = 'com.codingfeline.githubdata.local'
+    packageName = 'com.codingfeline.github.data.local'
 }
 
 kgql {
-    packageName = 'com.codingfeline.githubdata.api'
+    packageName = 'com.codingfeline.github.data.remote'
 }
 
 buildkonfig {
-    packageName = "com.codingfeline.githubdata"
+    packageName = "com.codingfeline.github"
     defaultConfigs {
         buildConfigField 'STRING', 'GITHUB_TOKEN', GITHUB_API_TOKEN
     }
@@ -110,6 +110,8 @@ kotlin {
                 implementation deps.ktor.json
 
                 implementation deps.kodein.common
+
+                implementation deps.stately
             }
         }
         commonTest {
@@ -157,7 +159,6 @@ kotlin {
         }
 
         iosTest {
-
         }
     }
 }
@@ -199,15 +200,10 @@ task iosTest {
     def device = project.findProperty("iosDevice")?.toString() ?: "iPhone 8"
     def buildType = project.findProperty("kotlin.build.type") ?: "DEBUG"
 
-    kotlin.targets.ios.compilations.test.target.binaries.forEach { b ->
-        println("b: ${b.name} ${b.baseName}, ${b.buildType}")
-    }
-
     def bin = kotlin.targets.ios.compilations.test.target.binaries.findExecutable("test", buildType)
     dependsOn bin.linkTask
 
     doLast {
-        println("outputPath: ${bin.outputFile.absolutePath}")
         exec {
             commandLine "xcrun", "simctl", "spawn", device, bin.outputFile.absolutePath
         }

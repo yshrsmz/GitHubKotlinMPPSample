@@ -1,4 +1,4 @@
-package com.codingfeline.githubdata.remote
+package com.codingfeline.github.data.remote
 
 import android.os.Build
 import kotlinx.coroutines.runBlocking

@@ -2,9 +2,9 @@ package com.codingfeline.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.codingfeline.githubdata.initKodein
-import com.codingfeline.githubui.ViewerViewModel
-import com.codingfeline.githubui.getViewerKodein
+import com.codingfeline.github.data.initKodein
+import com.codingfeline.github.presentation.ViewerViewModel
+import com.codingfeline.github.presentation.getViewerKodein
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

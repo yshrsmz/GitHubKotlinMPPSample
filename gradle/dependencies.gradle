@@ -79,6 +79,8 @@ ext.deps = [
 
         ],
 
+        stately    : "co.touchlab:stately:0.5.2",
+
         koptional  : [
                 core: "com.gojuno.koptional:koptional:1.6.0"
         ],
