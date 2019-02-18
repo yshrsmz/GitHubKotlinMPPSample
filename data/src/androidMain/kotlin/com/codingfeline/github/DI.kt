@@ -1,7 +1,10 @@
-package com.codingfeline.github.data
+package com.codingfeline.github
 
 import android.content.Context
+import com.codingfeline.github.data.dataModule
 import com.codingfeline.github.data.local.Database
+import com.codingfeline.github.data.localModule
+import com.codingfeline.github.data.remoteModule
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import kotlinx.coroutines.Dispatchers

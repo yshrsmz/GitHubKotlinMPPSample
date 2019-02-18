@@ -2,7 +2,7 @@ package com.codingfeline.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.codingfeline.github.data.initKodein
+import com.codingfeline.github.initKodein
 import com.codingfeline.github.presentation.ViewerViewModel
 import com.codingfeline.github.presentation.getViewerKodein
 import kotlinx.coroutines.CoroutineScope
