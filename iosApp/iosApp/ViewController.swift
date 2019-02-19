@@ -3,58 +3,34 @@ import data
 
 class ViewController: UIViewController {
     
-    let kodein = DataModuleKt.doInitKodein()
+    let kodein = DIKt.doInitKodein()
     
-    lazy var repository:GitHubRepositoryIos = { DataModuleKt.getGitHubRepository(kodein: self.kodein) }()
+    lazy var viewerKodein = ViewerModuleKt.getViewerKodein(dataKodein: self.kodein)
     
-    lazy var repoNotifier = UserRepositoryDataNotifier { (repos) -> KotlinUnit in
-        self.onUserRepoUpdate(repos: repos)
-        return KotlinUnit()
-    }
+    lazy var mainViewModel:MainViewModel = ViewerModuleKt.getMainViewModel(viewerKodein: self.viewerKodein)
     
-    lazy var userNotifier = UserDataNotifier { (user) -> KotlinUnit in
-        self.onUserUpdate(user: user)
-        return KotlinUnit()
-    }
+    lazy var notifier:MainViewModelStateNotifier = ViewerModuleKt.getViewerViewModelStateNotifier(viewerKodein: self.viewerKodein)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        printCurrentThread(label: "viewDidLoad")
         label.text = Proxy().proxyHello()
         
-        let query = repository.observeViewer()
-        userNotifier.updateQuery(newQuery: query)
-        
-        repository.fetchViewer()
-    }
-    
-    func onUserUpdate(user: User?) {
-        printCurrentThread(label: "onUserUpdate")
-        if (user == nil) {
-            NSLog("user is nil")
-        } else {
-            NSLog("user is \(user)")
-            let repoQuery = repository.observeRepositoriesByOwner(login: user!.login)
-            repoNotifier.updateQuery(newQuery: repoQuery)
+        notifier.stateChanged(viewModel: mainViewModel) { (state) -> KotlinUnit in
+            NSLog("stateChanged: \(state)")
+            return KotlinUnit()
         }
-    }
-    
-    func onUserRepoUpdate(repos:[Repository]) {
-        printCurrentThread(label: "onUserRepoUpdate")
-        NSLog("repos: \(repos.count)", <#T##args: CVarArg...##CVarArg#>)
-//        repos.forEach({ (repo) in
-//            NSLog("repo: \(repo.name)")
-//        })
+        
+        notifier.effectReceived(viewModel: mainViewModel) { (effect) -> KotlinUnit in
+            NSLog("effectReceived: \(effect)")
+            return KotlinUnit()
+        }
+        
+        mainViewModel.doInit()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    func printCurrentThread(label:String)  {
-        NSLog("\(label) - current thread: \(Thread.current), \(OperationQueue.current?.underlyingQueue?.label ?? "None")")
-    }
-    
     
     @IBOutlet weak var label: UILabel!
 }

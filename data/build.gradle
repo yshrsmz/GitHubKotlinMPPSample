@@ -42,16 +42,20 @@ android {
     }
 }
 
+dependencies {
+
+}
+
 sqldelight {
-    packageName = 'com.codingfeline.githubdata.local'
+    packageName = 'com.codingfeline.github.data.local'
 }
 
 kgql {
-    packageName = 'com.codingfeline.githubdata.api'
+    packageName = 'com.codingfeline.github.data.remote'
 }
 
 buildkonfig {
-    packageName = "com.codingfeline.githubdata"
+    packageName = "com.codingfeline.github"
     defaultConfigs {
         buildConfigField 'STRING', 'GITHUB_TOKEN', GITHUB_API_TOKEN
     }
@@ -62,11 +66,36 @@ kotlin {
     def iosTargetName = project.findProperty("kotlin.target") ?: "iosX64"
     def iosTarget = presets.getByName(iosTargetName)
 
-    android()
+    android {
+        compilations.all {
+            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+                kotlinOptions {
+                    freeCompilerArgs = [
+                            '-Xuse-experimental=kotlin.Experimental',
+                            '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                            '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi'
+                    ]
+                }
+            }
+        }
+    }
 
     targetFromPreset(iosTarget, "ios") {
         binaries {
             framework()
+        }
+    }
+
+    targets.all { target ->
+        if (target.name == 'android') return // Android handles this differently
+        compilations.all { compilation ->
+            tasks[compileKotlinTaskName].kotlinOptions {
+                freeCompilerArgs = [
+                        '-Xuse-experimental=kotlin.Experimental',
+                        '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                        '-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi'
+                ]
+            }
         }
     }
 
@@ -81,6 +110,8 @@ kotlin {
                 implementation deps.ktor.json
 
                 implementation deps.kodein.common
+
+                implementation deps.stately
             }
         }
         commonTest {
@@ -101,6 +132,8 @@ kotlin {
 
                 api deps.sqldelight.driverAndroid
                 implementation deps.androidx.sqlite
+
+                api deps.androidx.arch.viewmodel
             }
         }
         androidTest {
@@ -126,7 +159,6 @@ kotlin {
         }
 
         iosTest {
-
         }
     }
 }
@@ -160,6 +192,20 @@ task copyFramework {
             into targetDir
             include 'data.framework/**'
             include 'data.framework.dSYM'
+        }
+    }
+}
+
+task iosTest {
+    def device = project.findProperty("iosDevice")?.toString() ?: "iPhone 8"
+    def buildType = project.findProperty("kotlin.build.type") ?: "DEBUG"
+
+    def bin = kotlin.targets.ios.compilations.test.target.binaries.findExecutable("test", buildType)
+    dependsOn bin.linkTask
+
+    doLast {
+        exec {
+            commandLine "xcrun", "simctl", "spawn", device, bin.outputFile.absolutePath
         }
     }
 }
