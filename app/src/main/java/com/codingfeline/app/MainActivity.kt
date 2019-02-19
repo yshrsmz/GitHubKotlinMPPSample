@@ -3,7 +3,7 @@ package com.codingfeline.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.codingfeline.github.initKodein
-import com.codingfeline.github.presentation.ViewerViewModel
+import com.codingfeline.github.presentation.MainViewModel
 import com.codingfeline.github.presentation.getViewerKodein
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
         getViewerKodein(initKodein(applicationContext))
     }
 
-    val viewModel: ViewerViewModel by instance()
+    val viewModel: MainViewModel by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +44,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
         launch {
             viewModel.states.consumeEach {
                 println("state: $it")
+            }
+        }
+
+        launch {
+            viewModel.effects.consumeEach {
+                println("effect: $it")
             }
         }
     }
