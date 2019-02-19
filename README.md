@@ -2,6 +2,17 @@
 
 Sample Project of Kotlin Multiplatform(Android/iOS).
 
+It fetches viewer's user info and his repositories.
+
+Currently experimenting with MVI-ish architecture using Kotlin Coroutines.
+
+## Libraries
+
+- Ktor
+- kgql(for GraphQL)
+- SQLDelight
+
+
 ## Setup
 
 1. get GitHub API token. needs user scope.
