@@ -8,9 +8,10 @@ Currently experimenting with MVI-ish architecture using Kotlin Coroutines.
 
 ## Libraries
 
-- Ktor
+- Kodein(for DI)
+- Ktor(for Networking)
 - kgql(for GraphQL)
-- SQLDelight
+- SQLDelight(for local cache)
 - BuildKonfig(to embed github api token in the code)
 
 
