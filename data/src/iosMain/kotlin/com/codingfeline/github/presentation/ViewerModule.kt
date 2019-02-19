@@ -27,15 +27,7 @@ fun getViewerKodein(dataKodein: Kodein): Kodein {
         bind<FetchViewer>() with provider { FetchViewer(instance()) }
         bind<ObserveViewer>() with provider { ObserveViewer(instance()) }
         bind<ObserveViewerRepositories>() with provider { ObserveViewerRepositories(instance()) }
-        bind<ViewerViewModel>() with provider {
-            ViewerViewModel(
-                instance(Tags.BG_CONTEXT),
-                instance(),
-                instance(),
-                instance()
-            )
-        }
-        bind<ViewerViewModelStateNotifier>() with provider { ViewerViewModelStateNotifier(instance(Tags.UI_CONTEXT)) }
+        bind<MainViewModelStateNotifier>() with provider { MainViewModelStateNotifier(instance(Tags.UI_CONTEXT)) }
         bind<GitHubRepositoryIos>() with provider {
             GitHubRepositoryIos(
                 instance(),
@@ -50,7 +42,6 @@ fun getViewerKodein(dataKodein: Kodein): Kodein {
                 instance(Tags.BG_CONTEXT),
                 instance(),
                 instance(),
-                instance(),
                 instance()
             )
         }
@@ -60,13 +51,7 @@ fun getViewerKodein(dataKodein: Kodein): Kodein {
 
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
-fun getViewerViewModel(viewerKodein: Kodein): ViewerViewModel {
-    return viewerKodein.direct.instance()
-}
-
-@ObsoleteCoroutinesApi
-@ExperimentalCoroutinesApi
-fun getViewerViewModelStateNotifier(viewerKodein: Kodein): ViewerViewModelStateNotifier {
+fun getViewerViewModelStateNotifier(viewerKodein: Kodein): MainViewModelStateNotifier {
     return viewerKodein.direct.instance()
 }
 
@@ -76,7 +61,7 @@ fun getMainViewModel(viewerKodein: Kodein): MainViewModel {
 
 @ExperimentalCoroutinesApi
 @ObsoleteCoroutinesApi
-class ViewerViewModelStateNotifier(
+class MainViewModelStateNotifier(
     uiContext: CoroutineContext
 ) : CoroutineScope {
 
@@ -84,10 +69,19 @@ class ViewerViewModelStateNotifier(
 
     override val coroutineContext: CoroutineContext = job + uiContext
 
-    fun stateChanged(viewModel: ViewerViewModel, callback: (state: ViewerState) -> Unit) {
+    fun stateChanged(viewModel: MainViewModel, stateChanged: (state: MainState) -> Unit) {
         launch {
             viewModel.states.consumeEach {
-                callback(it)
+                stateChanged(it)
+            }
+        }
+
+    }
+
+    fun effectReceived(viewModel: MainViewModel, effectReceived: (effect: MainEffect) -> Unit) {
+        launch {
+            viewModel.effects.consumeEach {
+                effectReceived(it)
             }
         }
     }

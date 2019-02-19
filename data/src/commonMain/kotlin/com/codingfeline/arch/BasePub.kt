@@ -44,4 +44,8 @@ abstract class BasePub<T> : Pub<T> {
     private fun checkError() {
         if (hadError.value) throw IllegalStateException("Had error")
     }
+
+    override fun dispose() {
+        removeAllSubs()
+    }
 }

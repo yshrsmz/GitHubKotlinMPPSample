@@ -7,24 +7,25 @@ class ViewController: UIViewController {
     
     lazy var viewerKodein = ViewerModuleKt.getViewerKodein(dataKodein: self.kodein)
     
-    lazy var repository = DIKt.getGitHubRepository(kodein: self.viewerKodein)
-    
     lazy var mainViewModel:MainViewModel = ViewerModuleKt.getMainViewModel(viewerKodein: self.viewerKodein)
+    
+    lazy var notifier:MainViewModelStateNotifier = ViewerModuleKt.getViewerViewModelStateNotifier(viewerKodein: self.viewerKodein)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         label.text = Proxy().proxyHello()
         
-        mainViewModel.doInit()
+        notifier.stateChanged(viewModel: mainViewModel) { (state) -> KotlinUnit in
+            NSLog("stateChanged: \(state)")
+            return KotlinUnit()
+        }
         
-//        repository.fetchViewer()
-    }
-    
-    func onUserRepoUpdate(repos:[Repository]) {
-        NSLog("repos: \(repos.count)")
-//        repos.forEach({ (repo) in
-//            NSLog("repo: \(repo.name)")
-//        })
+        notifier.effectReceived(viewModel: mainViewModel) { (effect) -> KotlinUnit in
+            NSLog("effectReceived: \(effect)")
+            return KotlinUnit()
+        }
+        
+        mainViewModel.doInit()
     }
 
     override func didReceiveMemoryWarning() {

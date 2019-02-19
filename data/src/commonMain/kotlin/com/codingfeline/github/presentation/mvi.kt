@@ -90,6 +90,9 @@ abstract class MviViewModel2<R : Result, S : State, E : Effect>(
     private val _states = BroadcastChannel<S>(1)
     val states get() = _states.openSubscription().also { _states.offer(_state) }
 
+    private val _effects = BroadcastChannel<E>(1)
+    val effects: ReceiveChannel<E> get() = _effects.openSubscription()
+
     private val results = Channel<R>(Channel.UNLIMITED)
 
     init {
@@ -106,8 +109,8 @@ abstract class MviViewModel2<R : Result, S : State, E : Effect>(
         results.send(result)
     }
 
-    protected fun offerResult(result: R) {
-        results.offer(result)
+    protected suspend fun sendEffect(effects: E) {
+        _effects.send(effects)
     }
 
     protected abstract fun reduce(result: R, previousState: S): S

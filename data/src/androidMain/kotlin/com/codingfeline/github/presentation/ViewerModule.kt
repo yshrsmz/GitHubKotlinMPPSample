@@ -16,8 +16,8 @@ fun getViewerKodein(dataKodein: Kodein): Kodein {
         bind<FetchViewer>() with provider { FetchViewer(instance()) }
         bind<ObserveViewer>() with provider { ObserveViewer(instance()) }
         bind<ObserveViewerRepositories>() with provider { ObserveViewerRepositories(instance()) }
-        bind<ViewerViewModel>() with provider {
-            ViewerViewModel(
+        bind<MainViewModel>() with provider {
+            MainViewModel(
                 instance(Tags.BG_CONTEXT),
                 instance(),
                 instance(),

@@ -9,4 +9,5 @@ interface Pub<T> {
     fun addSub(sub: Sub<T>)
     fun removeSub(sub: Sub<T>)
     fun removeAllSubs()
+    fun dispose()
 }

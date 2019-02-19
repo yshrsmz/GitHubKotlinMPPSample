@@ -1,10 +1,9 @@
 package com.codingfeline.github.data
 
+import co.touchlab.stately.ensureNeverFrozen
 import com.codingfeline.github.data.local.GitHubLocalGateway
 import com.codingfeline.github.data.remote.GitHubRemoteGateway
 import com.codingfeline.github.data.remote.response.toUserAndRepositories
-import com.codingfeline.github.platform.checkIfFrozen
-import com.codingfeline.github.platform.printCurrentThread
 import com.squareup.sqldelight.Query
 import kotlin.native.concurrent.ThreadLocal
 
@@ -26,17 +25,10 @@ class GitHubRepositoryImpl(
 ) : GitHubRepository {
 
     init {
-        println("GitHubRepositoryImpl#init---")
-        printCurrentThread()
-        checkIfFrozen("GitHubRepositoryImpl", this)
+        ensureNeverFrozen()
     }
 
     override suspend fun fetchViewer() {
-        printCurrentThread()
-        println("GithubRepository#fetchViewer")
-        checkIfFrozen("GitHubRepositoryImpl$this", this)
-        checkIfFrozen("localGateway", localGateway)
-        checkIfFrozen("remoteGateway", remoteGateway)
 
         val result = remoteGateway.fetchViewerRepository()
 

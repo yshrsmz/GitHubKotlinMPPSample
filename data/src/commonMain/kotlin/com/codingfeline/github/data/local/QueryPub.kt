@@ -28,7 +28,8 @@ class QueryPub<Q : Any, Z>(
         queryResultsChanged()
     }
 
-    fun dispose() {
+    override fun dispose() {
+        super.dispose()
         query.removeListener(this)
     }
 }
