@@ -11,6 +11,7 @@ Currently experimenting with MVI-ish architecture using Kotlin Coroutines.
 - Ktor
 - kgql(for GraphQL)
 - SQLDelight
+- BuildKonfig(to embed github api token in the code)
 
 
 ## Setup
