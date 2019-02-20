@@ -23,3 +23,7 @@ Currently experimenting with MVI-ish architecture using Kotlin Coroutines.
 ```properties
 GITHUB_API_TOKEN=PLACE_YOUR_TOKEN
 ```
+
+### IntelliJ
+
+Tick "tick Delegate IDE build/run actions to gradle"(Settings - Build, Execution, Deployment - Build Tools - Gradle - Runner )
