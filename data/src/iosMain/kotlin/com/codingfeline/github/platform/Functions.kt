@@ -21,6 +21,8 @@ actual fun printCurrentThread() {
     )
 }
 
+internal actual val isMainThread get() = NSThread.isMainThread
+
 internal actual fun <B> backToFront(b: () -> B, job: (B) -> Unit) {
     dispatch_async_f(
         dispatch_get_main_queue(),

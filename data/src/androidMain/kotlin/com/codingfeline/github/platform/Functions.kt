@@ -11,6 +11,8 @@ actual fun printCurrentThread() {
     println("current thread: ${Thread.currentThread()}, ${Thread.currentThread().name}")
 }
 
+internal actual val isMainThread: Boolean get() = Looper.getMainLooper() === Looper.myLooper()
+
 private val btfHandler = Handler(Looper.getMainLooper())
 
 internal actual fun <B> backToFront(b: () -> B, job: (B) -> Unit) {

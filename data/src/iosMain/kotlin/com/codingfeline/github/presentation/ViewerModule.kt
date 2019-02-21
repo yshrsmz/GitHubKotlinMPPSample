@@ -45,6 +45,22 @@ fun getViewerKodein(dataKodein: Kodein): Kodein {
                 instance()
             )
         }
+
+        bind<MainViewModel2.MainProcessor>() with provider {
+            MainViewModel2.MainProcessor(
+                instance(Tags.BG_CONTEXT),
+                instance()
+            )
+        }
+
+        bind<MainViewModel2>() with provider {
+            MainViewModel2(
+                instance(Tags.BG_CONTEXT),
+                instance()
+            )
+        }
+
+        bind<MainViewModel2StateNotifier>() with provider { MainViewModel2StateNotifier(instance(Tags.UI_CONTEXT)) }
     }
 }
 
@@ -56,6 +72,14 @@ fun getViewerViewModelStateNotifier(viewerKodein: Kodein): MainViewModelStateNot
 }
 
 fun getMainViewModel(viewerKodein: Kodein): MainViewModel {
+    return viewerKodein.direct.instance()
+}
+
+fun getMainViewModel2(viewerKodein: Kodein): MainViewModel2 {
+    return viewerKodein.direct.instance()
+}
+
+fun getMainViewModel2StateNotifier(viewerKodein: Kodein): MainViewModel2StateNotifier {
     return viewerKodein.direct.instance()
 }
 
@@ -79,6 +103,38 @@ class MainViewModelStateNotifier(
     }
 
     fun effectReceived(viewModel: MainViewModel, effectReceived: (effect: MainEffect) -> Unit) {
+        launch {
+            viewModel.effects.consumeEach {
+                effectReceived(it)
+            }
+        }
+    }
+
+    fun dispose() {
+        job.cancel()
+    }
+}
+
+@ExperimentalCoroutinesApi
+@ObsoleteCoroutinesApi
+class MainViewModel2StateNotifier(
+    uiContext: CoroutineContext
+) : CoroutineScope {
+
+    private val job = SupervisorJob()
+
+    override val coroutineContext: CoroutineContext = job + uiContext
+
+    fun stateChanged(viewModel: MainViewModel2, stateChanged: (state: MainState2) -> Unit) {
+        launch {
+            viewModel.states.consumeEach {
+                stateChanged(it)
+            }
+        }
+
+    }
+
+    fun effectReceived(viewModel: MainViewModel2, effectReceived: (effect: MainEffect2) -> Unit) {
         launch {
             viewModel.effects.consumeEach {
                 effectReceived(it)

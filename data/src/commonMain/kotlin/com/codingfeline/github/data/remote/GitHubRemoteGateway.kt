@@ -1,7 +1,6 @@
 package com.codingfeline.github.data.remote
 
 import com.codingfeline.github.data.remote.response.UserResponse
-import com.codingfeline.github.platform.checkIfFrozen
 import com.codingfeline.kgql.core.KgqlError
 import io.ktor.client.HttpClient
 import io.ktor.client.features.HttpClientFeature
@@ -30,8 +29,6 @@ class GitHubRemoteGatewayImpl(
     private val endpoint = Url("https://api.github.com/graphql")
 
     override suspend fun fetchViewerRepository(): KgqlResponse<UserResponse> {
-        checkIfFrozen("client", client)
-        checkIfFrozen("GitHubRemoteRepositoryImpl", this)
 
         val rawResult = client.post<String>(endpoint) {
             body = RepositoriesDocument.Query.requestBody()
@@ -40,7 +37,8 @@ class GitHubRemoteGatewayImpl(
         val jsonResult = Json.plain.parseJson(rawResult).jsonObject
 
         if (jsonResult.containsKey("data") && !jsonResult["data"].isNull) {
-            println("rawData.data: ${jsonResult["data"].jsonObject["viewer"]}")
+//            println("rawData.data: ${jsonResult["data"].jsonObject["viewer"]}")
+            println("viewer fetched")
             return KgqlResponse(
                 data = Json.nonstrict.fromJson(UserResponse.serializer(), jsonResult["data"].jsonObject["viewer"])
             )

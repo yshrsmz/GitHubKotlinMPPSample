@@ -5,3 +5,6 @@ expect fun checkIfFrozen(name: String, instance: Any?)
 expect fun printCurrentThread()
 
 internal expect fun <B> backToFront(b: () -> B, job: (B) -> Unit)
+
+
+internal expect val isMainThread: Boolean
