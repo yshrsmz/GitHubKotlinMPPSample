@@ -21,7 +21,7 @@ ext.deps = [
                 versions     : "com.github.ben-manes:gradle-versions-plugin:0.20.0",
                 sqldelight   : "com.squareup.sqldelight:gradle-plugin:${versions.sqldelight}",
                 kgql         : "com.codingfeline.kgql:gradle-plugin:0.2.1",
-                buildkonfig  : "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.3.0"
+                buildkonfig  : "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.3.1"
         ],
         kotlin     : [
                 stdlib       : [
