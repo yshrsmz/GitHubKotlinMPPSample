@@ -13,66 +13,13 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.native.concurrent.ThreadLocal
 
-interface Intent
-interface Action
 interface Result
 interface State
 interface Effect
-interface UseCaseUpdate
-
-@ExperimentalCoroutinesApi
-@ObsoleteCoroutinesApi
-abstract class MviViewModel<E : Intent, S : State>(
-    initialState: S,
-    private val usecaseContext: CoroutineContext,
-    private val defaultStateConstructor: (S) -> S
-) : ViewModel(), CoroutineScope {
-
-    override val coroutineContext: CoroutineContext = usecaseContext + SupervisorJob()
-
-    private var _state: S = initialState
-    val state get() = _state
-    val stateAsDefault get() = defaultStateConstructor(_state)
-
-    private val _events = Channel<E>(Channel.UNLIMITED)
-    val events get() = _events
-
-    private val useCases = Channel<ReceiveChannel<UseCaseUpdate>>(Channel.UNLIMITED)
-
-    private val _states = BroadcastChannel<S>(1)
-    val states: ReceiveChannel<S>
-        get() = _states.openSubscription().also { _states.offer(stateAsDefault) }
-
-    init {
-        launch {
-            _events.consumeEach {
-                useCases.send(handleEvent(it))
-            }
-        }
-
-        launch {
-            useCases.consumeEach { updates ->
-                updates.consumeEach {
-                    _state = updateState(it)
-                    _states.send(_state)
-                }
-            }
-        }
-    }
-
-    protected abstract fun handleEvent(event: E): ReceiveChannel<UseCaseUpdate>
-
-    protected abstract fun updateState(update: UseCaseUpdate): S
-
-    override fun onCleared() {
-        super.onCleared()
-        coroutineContext.cancel()
-    }
-}
 
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
-abstract class MviViewModel2<R : Result, S : State, E : Effect>(
+abstract class MviViewModel<R : Result, S : State, E : Effect>(
     initialState: () -> S,
     @ThreadLocal val bgContext: CoroutineContext
 ) : ViewModel(), CoroutineScope {
@@ -117,6 +64,6 @@ abstract class MviViewModel2<R : Result, S : State, E : Effect>(
 
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
+        cancel()
     }
 }

@@ -47,7 +47,7 @@ class MainViewModel(
     val fetchViewer: FetchViewer,
     val observeViewer: ObserveViewer,
     val observeViewerRepositories: ObserveViewerRepositories
-) : MviViewModel2<MainResult, MainState, MainEffect>({ MainState.Loading }, bgContext) {
+) : MviViewModel<MainResult, MainState, MainEffect>({ MainState.Loading }, bgContext) {
 
     private val userQueryPub: Pub<MainResult>
 
