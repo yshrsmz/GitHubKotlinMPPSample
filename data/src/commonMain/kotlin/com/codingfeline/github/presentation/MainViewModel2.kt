@@ -15,6 +15,9 @@ import com.codingfeline.github.data.User
 import com.codingfeline.github.platform.backToFront
 import com.squareup.sqldelight.Query
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -130,29 +133,31 @@ class MainViewModel2(
         private val gitHubRepository: GitHubRepository
     ) : Processor<MainAction2>(bgContext) {
 
-        private var viewerQuery: QueryListener<User, User?>? = null
-        private var repositoriesQuery: QueryListener<Repository, List<Repository>>? = null
+        private var viewerChannel: ReceiveChannel<Query<User>>? = null
+        private var repositoriesChannel: ReceiveChannel<Query<Repository>>? = null
 
         private fun processObserveViewer() {
-            if (viewerQuery != null) return
+            if (viewerChannel != null) return
+            println("selectViewer")
+            viewerChannel = gitHubRepository.selectViewer().asChannel()
 
-            val query = gitHubRepository.selectViewer()
-            viewerQuery = QueryListener(query) { it.executeAsOneOrNull() }
-            viewerQuery?.addListener {
-                it?.let { put(MainAction2.UserUpdated(it)) }
+            launch {
+                viewerChannel?.consumeEach { q ->
+                    println("selectViewer - consumeEach")
+                    q.executeAsOneOrNull()?.let { put(MainAction2.UserUpdated(it)) }
+                }
             }
-            viewerQuery?.refresh()
         }
 
         private fun processObserveViewerRepositories() {
-            if (repositoriesQuery != null) return
+            if (repositoriesChannel != null) return
+            repositoriesChannel = gitHubRepository.selectRepositoriesForViewer().asChannel()
 
-            val query = gitHubRepository.selectRepositoriesForViewer()
-            repositoriesQuery = QueryListener(query) { it.executeAsList() }
-            repositoriesQuery?.addListener {
-                put(MainAction2.RepositoriesUpdated(it))
+            launch {
+                repositoriesChannel?.consumeEach { q ->
+                    put(MainAction2.RepositoriesUpdated(q.executeAsList()))
+                }
             }
-            repositoriesQuery?.refresh()
         }
 
         private fun processUserLoading() {
@@ -173,8 +178,6 @@ class MainViewModel2(
 
         override fun onCleared() {
             super.onCleared()
-            viewerQuery?.dispose()
-            repositoriesQuery?.dispose()
         }
     }
 }
@@ -218,5 +221,29 @@ class QueryListener<Q : Any, Z>(
         query.removeListener(queryListener)
         listeners.get()?.clear()
     }
+}
 
+@ExperimentalCoroutinesApi
+fun <T : Any> Query<T>.asChannel(): ReceiveChannel<Query<T>> {
+    val channel = Channel<Query<T>>(Channel.CONFLATED)
+    channel.offer(this)
+
+    val ref = ThreadLocalRef<(Query<T>) -> Unit>()
+    ref.set { channel.offer(it) }
+
+    val listener = object : Query.Listener, (Throwable?) -> Unit {
+        override fun queryResultsChanged() {
+            backToFront({ this@asChannel }, { q -> ref.get()?.let { it(q) } })
+        }
+
+        override fun invoke(t: Throwable?) {
+            ref.remove()
+            removeListener(this)
+        }
+    }
+
+    addListener(listener)
+    channel.invokeOnClose(listener)
+
+    return channel
 }
