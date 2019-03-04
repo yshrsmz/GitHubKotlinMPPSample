@@ -8,6 +8,7 @@ import com.codingfeline.github.presentation.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
@@ -48,7 +49,7 @@ abstract class Processor<A : Action>(
     }
 
     open fun onCleared() {
-        job.cancel()
+        cancel()
         postActionCallback.remove()
     }
 
@@ -97,7 +98,6 @@ abstract class RViewModel<I : Intent, A : Action, S : State, E : Effect>(
                 sendState(nextState)
             }
         }
-
     }
 
     protected suspend fun sendState(state: S) {
@@ -114,7 +114,7 @@ abstract class RViewModel<I : Intent, A : Action, S : State, E : Effect>(
 
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
+        cancel()
         processor.onCleared()
     }
 
