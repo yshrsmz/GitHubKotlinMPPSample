@@ -4,7 +4,7 @@ ext.versions = [
         coroutines    : '1.1.1',
         serialization : '0.10.0',
         dokka         : '0.9.17',
-        sqldelight    : '1.0.3',
+        sqldelight    : '1.1.1',
         ktor          : '1.1.3',
         kodein        : '6.1.0',
         robolectric   : '4.2',
@@ -18,7 +18,7 @@ ext.deps = [
                 kotlin       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
                 serialization: "org.jetbrains.kotlin:kotlin-serialization:${versions.kotlin}",
                 dokka        : "org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}",
-                versions     : "com.github.ben-manes:gradle-versions-plugin:0.20.0",
+                versions     : "com.github.ben-manes:gradle-versions-plugin:0.21.0",
                 sqldelight   : "com.squareup.sqldelight:gradle-plugin:${versions.sqldelight}",
                 kgql         : "com.codingfeline.kgql:gradle-plugin:0.2.1",
                 buildkonfig  : "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.3.1"
@@ -79,7 +79,7 @@ ext.deps = [
 
         ],
 
-        stately    : "co.touchlab:stately:0.5.2",
+        stately    : "co.touchlab:stately:0.6.0",
 
         koptional  : [
                 core: "com.gojuno.koptional:koptional:1.6.0"
