@@ -47,9 +47,7 @@ dependencies {
 }
 
 sqldelight {
-    Database {
-        packageName = 'com.codingfeline.github.data.local'
-    }
+    packageName = 'com.codingfeline.github.data.local'
 }
 
 kgql {
