@@ -188,10 +188,10 @@ class QueryListener<Q : Any, Z>(
 ) {
     private val listeners = ThreadLocalRef<MutableCollection<(Z) -> Unit>>()
 
-    private val queryListener = object : Query.Listener {
+    private val queryListener: Query.Listener = object : Query.Listener {
         override fun queryResultsChanged() {
             backToFront({ extractor(query).freeze() }) { item ->
-                listeners.get()!!.forEach { it(item) }
+                listeners.get()?.forEach { it(item) }
             }
         }
     }
@@ -202,7 +202,7 @@ class QueryListener<Q : Any, Z>(
     }
 
     fun addListener(listener: (Z) -> Unit) {
-        listeners.get()!!.add(listener)
+        listeners.get()?.add(listener)
     }
 
     fun removeListener(listener: (Z) -> Unit) {
@@ -210,7 +210,7 @@ class QueryListener<Q : Any, Z>(
     }
 
     fun removeAllListener() {
-        listeners.get()!!.clear()
+        listeners.get()?.clear()
     }
 
     fun refresh() {
