@@ -1,6 +1,7 @@
 package com.codingfeline.github
 
 import android.content.Context
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.codingfeline.github.data.dataModule
 import com.codingfeline.github.data.local.Database
 import com.codingfeline.github.data.localModule
@@ -18,7 +19,17 @@ import kotlin.coroutines.CoroutineContext
 internal fun appModule(context: Context): Kodein.Module {
     return Kodein.Module(name = "app") {
         bind<Context>() with instance(context)
-        bind<SqlDriver>() with singleton { AndroidSqliteDriver(Database.Schema, instance(), null) }
+        bind<SqlDriver>() with singleton {
+            AndroidSqliteDriver(
+                schema = Database.Schema,
+                context = instance(),
+                name = null, // memory db for debug
+                callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
+                    override fun onOpen(db: SupportSQLiteDatabase) {
+                        db.execSQL("PRAGMA foreign_keys=ON;")
+                    }
+                })
+        }
         bind<CoroutineContext>(Tags.UI_CONTEXT) with provider { Dispatchers.Main }
         bind<CoroutineContext>(Tags.BG_CONTEXT) with provider { Dispatchers.IO }
     }
